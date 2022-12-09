@@ -2,13 +2,13 @@ package com.example.backend.model;
 
 public class Image {
 
-    private final byte[] image;
+    private final byte[] data;
 
-    public Image(byte[] image) {
-        this.image = image;
+    public Image(byte[] data) {
+        this.data = data;
     }
 
-    public byte[] getImage() {
-        return image;
+    public byte[] getData() {
+        return data;
     }
 }

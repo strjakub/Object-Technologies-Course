@@ -18,5 +18,4 @@ public class ThumbnailService {
     private int generateId() {
         return 0;
     }
-
 }
