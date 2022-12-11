@@ -1,4 +1,4 @@
-package com.example.backend;
+package com.example.backend.utils;
 
 import com.example.backend.model.Image;
 import com.example.backend.model.Thumbnail;
@@ -22,6 +22,7 @@ public class HibernateUtil {
                 properties.put(Environment.USER, "");
                 properties.put(Environment.PASS, "");
                 properties.put(Environment.DIALECT, "org.hibernate.dialect.SQLiteDialect");
+                properties.put(Environment.POOL_SIZE, "50");
 
                 properties.put(Environment.SHOW_SQL, "true");
                 properties.put(Environment.FORMAT_SQL, "true");
