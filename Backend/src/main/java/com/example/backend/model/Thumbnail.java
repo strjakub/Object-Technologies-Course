@@ -42,7 +42,6 @@ public class Thumbnail {
     }
 
     public Thumbnail(int id, byte[] data, String extension, Image image) {
-        this.id = id;
         this.data = data;
         this.extension = extension;
         this.image = image;
