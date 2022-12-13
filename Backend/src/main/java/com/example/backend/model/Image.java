@@ -2,8 +2,6 @@ package com.example.backend.model;
 
 import javax.persistence.*;
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Table(name = Image.TABLE_NAME)
@@ -22,8 +20,8 @@ public class Image {
     @Column(name = Columns.EXTENSION, nullable = false)
     private String extension;
 
-    @OneToMany(mappedBy="image", cascade = CascadeType.ALL)
-    private Set<Thumbnail> thumbnails;
+    @OneToOne(mappedBy="image", cascade = CascadeType.ALL)
+    private Thumbnail thumbnail;
 
     public Image() {}
 
@@ -39,8 +37,8 @@ public class Image {
         return extension;
     }
 
-    public Set<Thumbnail> getThumbnails() {
-        return thumbnails;
+    public Thumbnail getThumbnail() {
+        return thumbnail;
     }
 
     public Image(byte[] data, String extension) {

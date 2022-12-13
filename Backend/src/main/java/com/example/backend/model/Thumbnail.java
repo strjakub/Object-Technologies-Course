@@ -19,7 +19,7 @@ public class Thumbnail {
     @Column(name = Columns.EXTENSION, nullable = false)
     private String extension;
 
-    @ManyToOne
+    @OneToOne(optional = false)
     @JoinColumn(name = "imageId")
     private Image image;
 
