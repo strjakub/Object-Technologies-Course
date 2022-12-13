@@ -10,6 +10,7 @@ public class Thumbnail {
     public static final String TABLE_NAME = "thumbnail";
 
     @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
     @Column(name = Columns.ID)
     private int id;
 
@@ -41,8 +42,7 @@ public class Thumbnail {
         return image;
     }
 
-    public Thumbnail(int id, byte[] data, String extension, Image image) {
-        this.id = id;
+    public Thumbnail(byte[] data, String extension, Image image) {
         this.data = data;
         this.extension = extension;
         this.image = image;

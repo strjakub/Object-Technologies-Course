@@ -2,15 +2,19 @@ package com.example.backend.dao;
 
 import com.example.backend.model.Image;
 import com.example.backend.model.Thumbnail;
+import org.springframework.stereotype.Component;
+
 import javax.persistence.PersistenceException;
 import java.util.Optional;
 
+@Component
 public class ThumbnailDAO extends GenericDAO<Thumbnail>{
 
-    public Optional<Thumbnail> create(final int id, final byte[] content, final String extension, final Image image) {
+    public Optional<Thumbnail> create(final byte[] content, final String extension, final Image image) {
         try {
-            save(new Thumbnail(id, content, extension, image));
-            return findById(id);
+            Thumbnail thumbnail = new Thumbnail(content, extension, image);
+            save(thumbnail);
+            return Optional.of(thumbnail);
         } catch (PersistenceException e) {
             e.printStackTrace();
         }
