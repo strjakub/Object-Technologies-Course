@@ -16,7 +16,11 @@ import java.util.Optional;
 @Service
 public class ThumbnailService {
 
-    ImageDAO imageDAO;
+    private final ImageDAO imageDAO;
+
+    public ThumbnailService(ImageDAO imageDAO) {
+        this.imageDAO = imageDAO;
+    }
 
     public Single<Thumbnail> getThumbnail(int id) {
         return Single.create(subscriber -> {
