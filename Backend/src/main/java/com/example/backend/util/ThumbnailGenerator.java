@@ -2,7 +2,6 @@ package com.example.backend.util;
 
 import com.example.backend.model.Image;
 import com.example.backend.model.Thumbnail;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.imageio.ImageIO;
@@ -33,7 +32,8 @@ public class ThumbnailGenerator {
                 inputImage.getType());
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         ImageIO.write(outputImage, image.getExtension(), outputStream);
-        return new Thumbnail(12345, outputStream.toByteArray(), image.getExtension(), image);
+        //TODO figure what should be put as id
+        return new Thumbnail(outputStream.toByteArray(), image.getExtension(), image);
     }
 
     private Dimension rescaleKeepingRatio(BufferedImage inputImage) {

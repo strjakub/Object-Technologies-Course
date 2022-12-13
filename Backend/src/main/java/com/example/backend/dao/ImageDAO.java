@@ -1,9 +1,12 @@
 package com.example.backend.dao;
 
 import com.example.backend.model.Image;
+import org.springframework.stereotype.Component;
+
 import javax.persistence.PersistenceException;
 import java.util.Optional;
 
+@Component
 public class ImageDAO extends GenericDAO<Image>{
 
     public Optional<Image> create(final byte[] content, final String extension) {

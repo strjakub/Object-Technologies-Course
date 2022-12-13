@@ -7,10 +7,11 @@ import java.util.Optional;
 
 public class ThumbnailDAO extends GenericDAO<Thumbnail>{
 
-    public Optional<Thumbnail> create(final int id, final byte[] content, final String extension, final Image image) {
+    public Optional<Thumbnail> create(final byte[] content, final String extension, final Image image) {
         try {
-            save(new Thumbnail(id, content, extension, image));
-            return findById(id);
+            Thumbnail thumbnail = new Thumbnail(content, extension, image);
+            save(thumbnail);
+            return Optional.of(thumbnail);
         } catch (PersistenceException e) {
             e.printStackTrace();
         }
