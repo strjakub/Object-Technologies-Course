@@ -3,18 +3,15 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-
 public class Gallery {
 
-    private final List<Photo> photos = new ArrayList<>();
+    private final List<Image> photos = new ArrayList<>();
 
-    public void addPhoto(Photo photo) {
+    public void addPhoto(Image photo) {
         photos.add(photo);
     }
 
-    public List<Photo> getPhotos() {
+    public List<Image> getPhotos() {
         return photos;
     }
 

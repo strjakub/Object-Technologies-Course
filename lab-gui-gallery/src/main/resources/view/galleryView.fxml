@@ -17,23 +17,9 @@
     <bottom>
         <Button text="Click me!" onAction="#sendData"/>
     </bottom>
-    <top>
-        <HBox styleClass="form-box">
-            <Label text="Search for photos:" prefWidth="120"/>
-        </HBox>
-    </top>
-    <left>
-        <ListView fx:id="imagesListView" prefWidth="120"/>
-    </left>
-    <center>
-        <VBox styleClass="image-box">
-            <HBox styleClass="form-box">
-                <Label text="Picture name:"/>
-                <TextField fx:id="imageNameField" prefWidth="500"/>
-            </HBox>
-            <ScrollPane>
-                <ImageView fx:id="imageView"/>
-            </ScrollPane>
-        </VBox>
-    </center>
+
+    <BorderPane>
+        <fx:include fx:id="image" source="image.fxml"/>
+    </BorderPane>
+
 </BorderPane>

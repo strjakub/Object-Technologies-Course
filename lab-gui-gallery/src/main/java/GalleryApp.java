@@ -13,26 +13,20 @@ import java.io.IOException;
 public class GalleryApp extends Application {
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) throws IOException {
         var gallery = new Gallery();
-        try {
-            // load layout from FXML file
-            var loader = new FXMLLoader();
-            loader.setLocation(GalleryApp.class.getResource("view/galleryView.fxml"));
-            BorderPane rootLayout = loader.load();
 
-            // set initial data into controller
-            GalleryController controller = loader.getController();
-            controller.setModel(gallery);
+        var loader = new FXMLLoader();
+        loader.setLocation(GalleryApp.class.getResource("view/galleryView.fxml"));
+        BorderPane rootLayout = loader.load();
 
-            // add layout to a scene and show them all
-            configureStage(primaryStage, rootLayout);
-            primaryStage.show();
+        // set initial data into controller
+        GalleryController controller = loader.getController();
+        controller.setModel(gallery);
 
-        } catch (IOException e) {
-            // don't do this in common apps
-            e.printStackTrace();
-        }
+        // add layout to a scene and show them all
+        configureStage(primaryStage, rootLayout);
+        primaryStage.show();
     }
 
     private void configureStage(Stage primaryStage, BorderPane rootLayout) {

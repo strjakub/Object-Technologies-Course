@@ -35,3 +35,6 @@ out/
 
 ### VS Code ###
 .vscode/
+Backend/orm.db
+lab-gui-gallery/*.log
+
