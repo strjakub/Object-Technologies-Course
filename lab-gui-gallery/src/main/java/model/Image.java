@@ -8,4 +8,8 @@ public class Image {
         this.data = data;
         this.extension = extension;
     }
+
+    public byte[] getData() {
+        return this.data;
+    }
 }

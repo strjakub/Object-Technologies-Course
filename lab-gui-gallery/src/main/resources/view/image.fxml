@@ -2,12 +2,13 @@
 
 <?import javafx.scene.text.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
 
-<StackPane 
+<VBox 
     xmlns="http://javafx.com/javafx"
     xmlns:fx="http://javafx.com/fxml"
     fx:controller="controller.ImageController">
-    <children>
-        <Text fx:id="counter" />
-    </children>
-</StackPane>
+
+    <Button text="22423243!" fx:id="button" onAction="#click"/>
+
+</VBox>

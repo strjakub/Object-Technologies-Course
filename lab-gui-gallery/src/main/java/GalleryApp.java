@@ -3,7 +3,7 @@ import controller.GalleryController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import model.Gallery;
@@ -18,7 +18,7 @@ public class GalleryApp extends Application {
 
         var loader = new FXMLLoader();
         loader.setLocation(GalleryApp.class.getResource("view/galleryView.fxml"));
-        BorderPane rootLayout = loader.load();
+        Pane rootLayout = loader.load();
 
         // set initial data into controller
         GalleryController controller = loader.getController();
@@ -29,7 +29,7 @@ public class GalleryApp extends Application {
         primaryStage.show();
     }
 
-    private void configureStage(Stage primaryStage, BorderPane rootLayout) {
+    private void configureStage(Stage primaryStage, Pane rootLayout) {
         var scene = new Scene(rootLayout);
         primaryStage.setScene(scene);
         primaryStage.setTitle("Gallery app");
