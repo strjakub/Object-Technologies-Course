@@ -45,8 +45,10 @@ public class GalleryController {
         event.consume();
 
         var chooser = new FileChooser();
-        chooser.setTitle("Open File");
-        var file = chooser.showSaveDialog(new Stage());
+        var filter = new FileChooser.ExtensionFilter("ZIP lub PNG files", "*.zip", "*.png");
+        chooser.getExtensionFilters().add(filter);
+
+        var file = chooser.showOpenDialog(new Stage());
 
         if (file == null) {
             return;
@@ -68,8 +70,8 @@ public class GalleryController {
             zip.close();
             return;
         }
-        
-        sendOneImage(file.getPath());
+
+        sendOneImage(absolutePath);
     }
 
     private void sendOneImage(byte[] bytes, String extension) throws IOException {
