@@ -28,7 +28,10 @@ public class ThumbnailService {
             if (res.isEmpty()) {
                 subscriber.onError(new EntityNotFoundException());
             }
-            subscriber.onSuccess(res.get().getThumbnail());
+//            System.out.println(id);
+//            System.out.println(SessionService.getSession().createQuery("SELECT i FROM Image i", Image.class).getResultList());
+//            System.out.println(SessionService.getSession().createQuery("SELECT t FROM Thumbnail t", Thumbnail.class).getResultList());
+//            subscriber.onSuccess(res.get().getThumbnail());
         });
     }
 }

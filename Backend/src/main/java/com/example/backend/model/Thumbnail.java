@@ -20,7 +20,7 @@ public class Thumbnail {
     @Column(name = Columns.EXTENSION, nullable = false)
     private String extension;
 
-    @OneToOne(optional = false)
+    @OneToOne(optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "imageId")
     private Image image;
 

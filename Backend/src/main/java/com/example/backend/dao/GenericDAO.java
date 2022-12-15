@@ -9,7 +9,7 @@ public abstract class GenericDAO<T> {
 
     public void save(final T object) throws PersistenceException {
         SessionService.openSession();
-        final Session session = SessionService.getSession();
+        final Session session = currentSession();
         Transaction transaction = session.beginTransaction();
         session.save(object);
         transaction.commit();
