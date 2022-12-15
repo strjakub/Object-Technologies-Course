@@ -3,8 +3,9 @@ package com.example.backend.service;
 import com.example.backend.dao.ImageDAO;
 import com.example.backend.dao.ThumbnailDAO;
 import com.example.backend.model.Image;
-import com.example.backend.util.ThumbnailGenerator;
+import com.example.backend.model.Thumbnail;
 import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -13,16 +14,14 @@ import java.util.Optional;
 @Service
 public class ImageService {
 
-    private final ThumbnailGenerator generator;
-
     private final ImageDAO imageDAO;
 
-    private final ThumbnailDAO thumbnailDAO;
+    private final ThumbnailService thumbnailService;
 
-    public ImageService(ThumbnailGenerator generator, ImageDAO imageDAO, ThumbnailDAO thumbnailDAO) {
-        this.generator = generator;
+
+    public ImageService(ImageDAO imageDAO, ThumbnailService thumbnailService) {
         this.imageDAO = imageDAO;
-        this.thumbnailDAO = thumbnailDAO;
+        this.thumbnailService = thumbnailService;
     }
 
     public Single<Integer> uploadImage(Image image) {
@@ -31,7 +30,6 @@ public class ImageService {
             if (res.isEmpty()) {
                 subscriber.onError(new EntityNotFoundException());
             }
-            thumbnailDAO.create(generator.convertToThumbnail(image), image.getExtension(), image);
             subscriber.onSuccess(res.get().getId());
         });
     }
@@ -40,7 +38,7 @@ public class ImageService {
         return Single.create(subscriber -> {
             Optional<Image> res = imageDAO.findById(id);
             if (res.isEmpty()) {
-                subscriber.onError(new EntityNotFoundException());
+                throw new EntityNotFoundException();
             }
             subscriber.onSuccess(res.get());
         });

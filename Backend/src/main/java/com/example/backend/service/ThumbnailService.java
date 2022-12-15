@@ -4,10 +4,8 @@ import com.example.backend.dao.ImageDAO;
 import com.example.backend.dao.ThumbnailDAO;
 import com.example.backend.model.Image;
 import com.example.backend.model.Thumbnail;
-import io.reactivex.rxjava3.core.Observable;
+import com.example.backend.util.ThumbnailGenerator;
 import io.reactivex.rxjava3.core.Single;
-import io.reactivex.rxjava3.schedulers.Schedulers;
-import io.reactivex.rxjava3.subjects.PublishSubject;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -18,8 +16,14 @@ public class ThumbnailService {
 
     private final ImageDAO imageDAO;
 
-    public ThumbnailService(ImageDAO imageDAO) {
+    private final ThumbnailDAO thumbnailDAO;
+
+    private final ThumbnailGenerator generator;
+
+    public ThumbnailService(ImageDAO imageDAO, ThumbnailDAO thumbnailDAO, ThumbnailGenerator generator) {
         this.imageDAO = imageDAO;
+        this.thumbnailDAO = thumbnailDAO;
+        this.generator = generator;
     }
 
     public Single<Thumbnail> getThumbnail(int id) {
@@ -28,10 +32,16 @@ public class ThumbnailService {
             if (res.isEmpty()) {
                 subscriber.onError(new EntityNotFoundException());
             }
-//            System.out.println(id);
-//            System.out.println(SessionService.getSession().createQuery("SELECT i FROM Image i", Image.class).getResultList());
-//            System.out.println(SessionService.getSession().createQuery("SELECT t FROM Thumbnail t", Thumbnail.class).getResultList());
-//            subscriber.onSuccess(res.get().getThumbnail());
+        });
+    }
+
+    public Single<Thumbnail> generateThumbnail(Image img) {
+        return Single.create(subscriber -> {
+            Optional<Thumbnail> res = thumbnailDAO.create(generator.convertToThumbnail(img), img.getExtension(), img);
+            if (res.isEmpty()) {
+                subscriber.onError(new EntityNotFoundException());
+            }
+            subscriber.onSuccess(res.get());
         });
     }
 }

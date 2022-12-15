@@ -17,11 +17,11 @@ public class HibernateUtil {
             try {
                 Configuration configuration = new Configuration();
                 Properties properties = new Properties();
-                properties.put(Environment.DRIVER, "org.sqlite.JDBC");
-                properties.put(Environment.URL, "jdbc:sqlite:orm.db");
+                properties.put(Environment.DRIVER, "org.h2.Driver");
+                properties.put(Environment.URL, "jdbc:h2:./orm.db");
                 properties.put(Environment.USER, "");
                 properties.put(Environment.PASS, "");
-                properties.put(Environment.DIALECT, "org.hibernate.dialect.SQLiteDialect");
+                properties.put(Environment.DIALECT, "org.hibernate.dialect.H2Dialect");
                 properties.put(Environment.POOL_SIZE, "50");
 
                 properties.put(Environment.SHOW_SQL, "true");
