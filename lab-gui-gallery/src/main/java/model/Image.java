@@ -1,6 +1,10 @@
 package model;
 
 public class Image {
+    
+    private Integer id;
+    
+
     private final byte[] data;
     private final String extension;
 

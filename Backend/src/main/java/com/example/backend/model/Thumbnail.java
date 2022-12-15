@@ -1,5 +1,8 @@
 package com.example.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.apache.tomcat.util.codec.binary.Base64;
+
 import javax.persistence.*;
 import java.util.Arrays;
 
@@ -23,6 +26,7 @@ public class Thumbnail {
 
     @OneToOne
     @JoinColumn(name = "imageId")
+    @JsonIgnore
     private Image image;
 
     public Thumbnail() {}

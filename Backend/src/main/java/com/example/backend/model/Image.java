@@ -1,5 +1,7 @@
 package com.example.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Arrays;
 
@@ -21,6 +23,7 @@ public class Image {
     @Column(name = Columns.EXTENSION, nullable = false)
     private String extension;
 
+    @JsonIgnore
     @OneToOne(mappedBy="image")
     private Thumbnail thumbnail;
 

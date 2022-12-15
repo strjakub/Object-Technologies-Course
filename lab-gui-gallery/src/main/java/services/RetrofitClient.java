@@ -15,7 +15,6 @@ public class RetrofitClient {
 
         if (retrofit == null) {
 
-
             var okHttpClient = new OkHttpClient().newBuilder()
                 .connectTimeout(60, TimeUnit.SECONDS)
                 .readTimeout(60, TimeUnit.SECONDS)

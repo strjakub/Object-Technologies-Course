@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.layout.VBox;
+import model.Dto;
 import model.Image;
 
 import services.NetworkCallback;
@@ -30,18 +31,18 @@ public class ImageController {
     public void initialize() {
         var progress = new ProgressIndicator();
         container.getChildren().add(progress);
-        button.setDisable(true);
+        // button.setDisable(true);
     }
 
     @FXML
     private void click(ActionEvent event) {
-        RetrofitService.getThumbnail(id, new NetworkCallback<Image>() {
+        RetrofitService.getThumbnail(id, new NetworkCallback<Dto>() {
             @Override
-            public void process(Image result) throws IOException {
+            public void process(Dto result) throws IOException {
                 System.out.println("mnnn");
                 if (result != null)
                 {
-                    System.out.println(result.getData().length);
+                    System.out.println(result.extension);
                 }
             }
         });
