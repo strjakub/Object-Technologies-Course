@@ -17,7 +17,10 @@ public class NetworkCallback<T> implements Callback<T> {
         if (response == null) {
             call.cancel();
             System.out.println("Error while http request");
+            return;
         }
+
+        System.out.println("Http ok");
 
         var result = response.body();
         Platform.runLater(new Runnable() {
@@ -38,5 +41,7 @@ public class NetworkCallback<T> implements Callback<T> {
     public void onFailure(Call<T> call, Throwable t) {
         call.cancel();
         System.out.println("Error while http request");
+        System.out.println(t.getMessage());
+        System.out.println(t.toString());
     }
 }
