@@ -1,6 +1,8 @@
 package com.example.backend.model;
 
+import com.example.backend.service.ByteArraySerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.apache.tomcat.util.codec.binary.Base64;
 
 import javax.persistence.*;
@@ -19,6 +21,7 @@ public class Thumbnail {
 
     @Lob
     @Column(name = Columns.CONTENT)
+    @JsonSerialize(using = ByteArraySerializer.class)
     private byte[] data;
 
     @Column(name = Columns.EXTENSION, nullable = false)

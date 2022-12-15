@@ -76,7 +76,7 @@ public class GalleryController {
     private void sendOneImage(byte[] bytes, String extension) throws IOException {
 
         if (!extension.equals("png")) {
-            System.out.println("Dopuszczalne rozszerzenie to .png, a jest: " + extension);
+            System.out.println("Dopuszczalne rozszerzenie to png, a jest: " + extension);
             return;
         }
 
@@ -84,7 +84,6 @@ public class GalleryController {
         RetrofitService.postImage(image, new NetworkCallback<Integer>() {
             @Override
             public void process(Integer result) throws IOException {
-                System.out.println("Received: " + result.toString());
                 var loader = new FXMLLoader();
                 loader.setLocation(GalleryController.class.getResource("../view/image.fxml"));
                 VBox rootLayout = loader.load();
