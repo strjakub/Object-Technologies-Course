@@ -10,6 +10,8 @@ import javafx.event.ActionEvent;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Collections;
+import java.util.zip.ZipFile;
 
 import model.Gallery;
 import model.Image;
@@ -50,12 +52,34 @@ public class GalleryController {
             return;
         }
 
-        var fileName = file.getPath();
-        var extension = ImageHelper.getExtension(fileName);
-        var path  = Paths.get(file.getPath());
-        var bytes = Files.readAllBytes(path);
-        var image = new Image(bytes, extension);
+        var absolutePath = file.getAbsolutePath();
+        var extension = ImageHelper.getExtension(absolutePath);
 
+        if (extension.equals(".zip")) {
+            var zip = new ZipFile(absolutePath);
+            for (var entry: Collections.list(zip.entries())) {
+                if (entry.getName().endsWith(".png")) {
+                    var stream = zip.getInputStream(entry);
+                    var bytes = stream.readAllBytes();
+                    var ext = ImageHelper.getExtension(entry.getName());
+                    sendOneImage(bytes, ext);
+                }
+            }
+            zip.close();
+            return;
+        }
+        
+        sendOneImage(file.getPath());
+    }
+
+    private void sendOneImage(byte[] bytes, String extension) throws IOException {
+
+        if (!extension.equals(".png")) {
+            System.out.println("Dopuszczalne rozszerzenie to .png, a jest: " + extension);
+            return;
+        }
+
+        var image = new Image(bytes, extension);
         RetrofitService.postImage(image, new NetworkCallback<Integer>() {
             @Override
             public void process(Integer result) throws IOException {
@@ -68,5 +92,12 @@ public class GalleryController {
                 pane.getChildren().add(rootLayout);
             }
         });
+    }
+
+    private void sendOneImage(String fullPath) throws IOException {
+        var extension = ImageHelper.getExtension(fullPath);
+        var path  = Paths.get(fullPath);
+        var bytes = Files.readAllBytes(path);
+        sendOneImage(bytes, extension);
     }
 }
