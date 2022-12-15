@@ -8,10 +8,18 @@ import org.hibernate.Transaction;
 public abstract class GenericDAO<T> {
 
     public void save(final T object) throws PersistenceException {
-        SessionService.openSession();
         final Session session = currentSession();
-        Transaction transaction = session.beginTransaction();
+        final Transaction transaction = session.beginTransaction();
         session.save(object);
+        session.merge(object);
+        transaction.commit();
+    }
+
+    public void update(final T object) throws PersistenceException {
+        final Session session = currentSession();
+        final Transaction transaction = session.beginTransaction();
+        session.update(object);
+        session.merge(object);
         transaction.commit();
     }
 

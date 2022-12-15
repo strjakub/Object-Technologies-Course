@@ -14,14 +14,15 @@ public class Thumbnail {
     @Column(name = Columns.ID)
     private int id;
 
+    @javax.persistence.Lob
     @Column(name = Columns.CONTENT)
     private byte[] data;
 
     @Column(name = Columns.EXTENSION, nullable = false)
     private String extension;
 
-    @OneToOne(optional = false, cascade = CascadeType.ALL)
-    @JoinColumn(name = "imageId")
+    @OneToOne
+    @JoinColumn(name = "image_id")
     private Image image;
 
     public Thumbnail() {}

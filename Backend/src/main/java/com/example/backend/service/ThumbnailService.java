@@ -4,6 +4,8 @@ import com.example.backend.dao.ImageDAO;
 import com.example.backend.dao.ThumbnailDAO;
 import com.example.backend.model.Image;
 import com.example.backend.model.Thumbnail;
+import com.example.backend.repositories.ImageRepository;
+import com.example.backend.repositories.ThumbnailRepository;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.schedulers.Schedulers;
@@ -16,21 +18,19 @@ import java.util.Optional;
 @Service
 public class ThumbnailService {
 
-    private final ImageDAO imageDAO;
+    private final ImageRepository imageRepository;
 
-    public ThumbnailService(ImageDAO imageDAO) {
-        this.imageDAO = imageDAO;
+    public ThumbnailService(ImageRepository imageRepository) {
+        this.imageRepository = imageRepository;
     }
 
     public Single<Thumbnail> getThumbnail(int id) {
         return Single.create(subscriber -> {
-            Optional<Image> res = imageDAO.findById(id);
+            SessionService.openSession();
+            Optional<Image> res = imageRepository.findById(id);
             if (res.isEmpty()) {
                 subscriber.onError(new EntityNotFoundException());
             }
-//            System.out.println(id);
-//            System.out.println(SessionService.getSession().createQuery("SELECT i FROM Image i", Image.class).getResultList());
-//            System.out.println(SessionService.getSession().createQuery("SELECT t FROM Thumbnail t", Thumbnail.class).getResultList());
 //            subscriber.onSuccess(res.get().getThumbnail());
         });
     }
