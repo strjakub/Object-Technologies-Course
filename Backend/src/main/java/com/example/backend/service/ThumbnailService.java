@@ -1,13 +1,11 @@
 package com.example.backend.service;
 
-import com.example.backend.dao.ImageDAO;
-import com.example.backend.dao.ThumbnailDAO;
 import com.example.backend.model.Image;
 import com.example.backend.model.Thumbnail;
-import io.reactivex.rxjava3.core.Observable;
+import com.example.backend.repositories.ImageRepository;
+import com.example.backend.repositories.ThumbnailRepository;
+import com.example.backend.util.ThumbnailGenerator;
 import io.reactivex.rxjava3.core.Single;
-import io.reactivex.rxjava3.schedulers.Schedulers;
-import io.reactivex.rxjava3.subjects.PublishSubject;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -16,22 +14,39 @@ import java.util.Optional;
 @Service
 public class ThumbnailService {
 
-    private final ImageDAO imageDAO;
+    private final ThumbnailRepository thumbnailRepository;
 
-    public ThumbnailService(ImageDAO imageDAO) {
-        this.imageDAO = imageDAO;
+    private final ImageRepository imageRepository;
+    private final ThumbnailGenerator generator;
+
+    public ThumbnailService(ThumbnailRepository thumbnailRepository, ImageRepository imageRepository, ThumbnailGenerator generator) {
+        this.thumbnailRepository = thumbnailRepository;
+        this.imageRepository = imageRepository;
+        this.generator = generator;
     }
 
     public Single<Thumbnail> getThumbnail(int id) {
         return Single.create(subscriber -> {
-            Optional<Image> res = imageDAO.findById(id);
-            if (res.isEmpty()) {
-                subscriber.onError(new EntityNotFoundException());
+            Optional<Image> img = imageRepository.findById(id);
+            if (img.isEmpty()) {
+                throw new EntityNotFoundException();
             }
-//            System.out.println(id);
-//            System.out.println(SessionService.getSession().createQuery("SELECT i FROM Image i", Image.class).getResultList());
-//            System.out.println(SessionService.getSession().createQuery("SELECT t FROM Thumbnail t", Thumbnail.class).getResultList());
-//            subscriber.onSuccess(res.get().getThumbnail());
+            Optional<Thumbnail> res = thumbnailRepository.findByImage_Id(img.get());
+            if (res.isEmpty()) {
+                throw new EntityNotFoundException();
+            }
+            subscriber.onSuccess(res.get());
+        });
+    }
+
+    public Single<Thumbnail> generateThumbnail(Image img) {
+        return Single.create(subscriber -> {
+            Thumbnail thumbnail = new Thumbnail(generator.convertToThumbnail(img), img.getExtension(), img);
+            Thumbnail res = thumbnailRepository.save(thumbnail);
+//            if (res.isEmpty()) {
+//                throw new EntityNotFoundException();
+//            }
+            subscriber.onSuccess(res);
         });
     }
 }
