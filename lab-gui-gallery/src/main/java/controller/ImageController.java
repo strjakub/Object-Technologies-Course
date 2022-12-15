@@ -5,7 +5,8 @@ import java.io.IOException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-
+import javafx.scene.control.ProgressIndicator;
+import javafx.scene.layout.VBox;
 import model.Image;
 
 import services.NetworkCallback;
@@ -23,7 +24,14 @@ public class ImageController {
     @FXML
     private Button button;
 
-    public void initialize() {}
+    @FXML
+    private VBox container;
+
+    public void initialize() {
+        var progress = new ProgressIndicator();
+        container.getChildren().add(progress);
+        button.setDisable(true);
+    }
 
     @FXML
     private void click(ActionEvent event) {
