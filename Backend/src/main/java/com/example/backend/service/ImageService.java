@@ -28,10 +28,10 @@ public class ImageService {
     public Single<Integer> uploadImage(Image image) {
         return Single.create(subscriber -> {
             Optional<Image> res = imageDAO.create(image.getData(), image.getExtension());
-            thumbnailDAO.create(generator.convertToThumbnail(image), image.getExtension(), image);
             if (res.isEmpty()) {
                 subscriber.onError(new EntityNotFoundException());
             }
+            thumbnailDAO.create(generator.convertToThumbnail(image), image.getExtension(), image);
             subscriber.onSuccess(res.get().getId());
         });
     }

@@ -1,11 +1,13 @@
 package com.example.backend.dao;
 
 import com.example.backend.model.Image;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.PersistenceException;
 import java.util.Optional;
 
+@Slf4j
 @Component
 public class ImageDAO extends GenericDAO<Image>{
 

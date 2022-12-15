@@ -14,6 +14,7 @@ public class ThumbnailDAO extends GenericDAO<Thumbnail>{
         try {
             Thumbnail thumbnail = new Thumbnail(content, extension, image);
             save(thumbnail);
+            image.setThumbnail(thumbnail);
             return Optional.of(thumbnail);
         } catch (PersistenceException e) {
             e.printStackTrace();

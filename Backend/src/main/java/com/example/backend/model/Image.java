@@ -41,6 +41,10 @@ public class Image {
         return thumbnail;
     }
 
+    public void setThumbnail(Thumbnail thumbnail) {
+        this.thumbnail = thumbnail;
+    }
+
     public Image(byte[] data, String extension) {
         this.data = data;
         this.extension = extension;
