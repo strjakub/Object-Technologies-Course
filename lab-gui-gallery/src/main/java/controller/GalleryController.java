@@ -4,7 +4,13 @@ import javafx.stage.Stage;
 import javafx.stage.FileChooser;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.event.ActionEvent;
 
 import java.io.IOException;
@@ -23,17 +29,23 @@ import util.ImageHelper;
 
 public class GalleryController {
 
+    private int rowIndex = 0;
+    private int columnIndex = 0;
+
     private Gallery galleryModel;
 
     @FXML
     private ImageController imageController;
 
     @FXML
-    private VBox pane;
+    private GridPane gridPane;
 
     @FXML
     public void initialize() {
         System.out.println("initializing");
+        gridPane.setMinWidth(565);
+        gridPane.setMinHeight(600);
+        gridPane.setBackground(new Background(new BackgroundFill(Color.rgb(140, 200, 140), new CornerRadii(0), new Insets(0))));
     }
 
     public void setModel(Gallery gallery) {
@@ -89,7 +101,15 @@ public class GalleryController {
                 VBox rootLayout = loader.load();
                 ImageController controller = loader.getController();
                 controller.setId(result);
-                pane.getChildren().add(rootLayout);
+                gridPane.add(rootLayout, columnIndex, rowIndex);
+
+                if (columnIndex == 4) {
+                    columnIndex = 0;
+                    rowIndex++;
+                }
+                else {
+                    columnIndex++;
+                }
             }
         });
     }
