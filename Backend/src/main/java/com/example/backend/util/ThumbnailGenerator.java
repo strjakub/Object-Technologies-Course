@@ -23,8 +23,10 @@ public class ThumbnailGenerator {
     private final int height = 300;
 
     public byte[] convertToThumbnail(Image image) throws IOException {
-        log.info("...Converting photo... : " + image.getData().length);
-        return resize(image);
+        log.info(String.format("...Converting photo... : size = %s", image.getData().length));
+        var result = resize(image);
+        log.info(String.format("...Converted photo... : id = %s, size = %s", image.getId(), image.getData().length));
+        return result;
     }
 
     private byte[] resize(Image image) throws IOException {

@@ -1,7 +1,5 @@
 package model;
 
-import java.util.Base64;
-
 public class Image {
     
     private final byte[] data;
@@ -13,10 +11,10 @@ public class Image {
     }
 
     public byte[] getData() {
-        return this.data;
+        return data;
     }
 
-    public static Image fromDto(Dto dto) {
-        return new Image(Base64.getDecoder().decode(dto.data), dto.extension);
+    public String getExtension() {
+        return extension;
     }
 }
