@@ -49,7 +49,6 @@ public class GalleryController {
         chooser.getExtensionFilters().add(filter);
 
         var file = chooser.showOpenDialog(new Stage());
-
         if (file == null) {
             return;
         }
@@ -57,10 +56,10 @@ public class GalleryController {
         var absolutePath = file.getAbsolutePath();
         var extension = ImageHelper.getExtension(absolutePath);
 
-        if (extension.equals(".zip")) {
+        if (extension.equals("zip")) {
             var zip = new ZipFile(absolutePath);
             for (var entry: Collections.list(zip.entries())) {
-                if (entry.getName().endsWith(".png")) {
+                if (entry.getName().endsWith("png")) {
                     var stream = zip.getInputStream(entry);
                     var bytes = stream.readAllBytes();
                     var ext = ImageHelper.getExtension(entry.getName());
@@ -76,7 +75,7 @@ public class GalleryController {
 
     private void sendOneImage(byte[] bytes, String extension) throws IOException {
 
-        if (!extension.equals(".png")) {
+        if (!extension.equals("png")) {
             System.out.println("Dopuszczalne rozszerzenie to .png, a jest: " + extension);
             return;
         }

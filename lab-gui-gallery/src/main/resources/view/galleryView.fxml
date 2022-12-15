@@ -16,7 +16,6 @@
             fx:controller="controller.GalleryController">
     <HBox>
         <Button text="Click me!" onAction="#sendData"/>
-        <VBox fx:id="pane">
-        </VBox>
+        <VBox fx:id="pane"></VBox>
     </HBox>
 </Pane>

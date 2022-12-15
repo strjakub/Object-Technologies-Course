@@ -7,7 +7,8 @@
 <VBox 
     xmlns="http://javafx.com/javafx"
     xmlns:fx="http://javafx.com/fxml"
-    fx:controller="controller.ImageController">
+    fx:controller="controller.ImageController"
+    fx:id="container">
 
     <Button text="22423243!" fx:id="button" onAction="#click"/>
 
