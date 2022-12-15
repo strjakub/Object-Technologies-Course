@@ -1,9 +1,9 @@
 package com.example.backend.service;
 
-import com.example.backend.dao.ImageDAO;
-import com.example.backend.dao.ThumbnailDAO;
 import com.example.backend.model.Image;
 import com.example.backend.model.Thumbnail;
+import com.example.backend.repositories.ImageRepository;
+import com.example.backend.repositories.ThumbnailRepository;
 import com.example.backend.util.ThumbnailGenerator;
 import io.reactivex.rxjava3.core.Single;
 import org.springframework.stereotype.Service;
@@ -14,34 +14,39 @@ import java.util.Optional;
 @Service
 public class ThumbnailService {
 
-    private final ImageDAO imageDAO;
+    private final ThumbnailRepository thumbnailRepository;
 
-    private final ThumbnailDAO thumbnailDAO;
-
+    private final ImageRepository imageRepository;
     private final ThumbnailGenerator generator;
 
-    public ThumbnailService(ImageDAO imageDAO, ThumbnailDAO thumbnailDAO, ThumbnailGenerator generator) {
-        this.imageDAO = imageDAO;
-        this.thumbnailDAO = thumbnailDAO;
+    public ThumbnailService(ThumbnailRepository thumbnailRepository, ImageRepository imageRepository, ThumbnailGenerator generator) {
+        this.thumbnailRepository = thumbnailRepository;
+        this.imageRepository = imageRepository;
         this.generator = generator;
     }
 
     public Single<Thumbnail> getThumbnail(int id) {
         return Single.create(subscriber -> {
-            Optional<Image> res = imageDAO.findById(id);
-            if (res.isEmpty()) {
-                subscriber.onError(new EntityNotFoundException());
+            Optional<Image> img = imageRepository.findById(id);
+            if (img.isEmpty()) {
+                throw new EntityNotFoundException();
             }
+            Optional<Thumbnail> res = thumbnailRepository.findByImage_Id(img.get());
+            if (res.isEmpty()) {
+                throw new EntityNotFoundException();
+            }
+            subscriber.onSuccess(res.get());
         });
     }
 
     public Single<Thumbnail> generateThumbnail(Image img) {
         return Single.create(subscriber -> {
-            Optional<Thumbnail> res = thumbnailDAO.create(generator.convertToThumbnail(img), img.getExtension(), img);
-            if (res.isEmpty()) {
-                subscriber.onError(new EntityNotFoundException());
-            }
-            subscriber.onSuccess(res.get());
+            Thumbnail thumbnail = new Thumbnail(generator.convertToThumbnail(img), img.getExtension(), img);
+            Thumbnail res = thumbnailRepository.save(thumbnail);
+//            if (res.isEmpty()) {
+//                throw new EntityNotFoundException();
+//            }
+            subscriber.onSuccess(res);
         });
     }
 }

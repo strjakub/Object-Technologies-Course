@@ -35,7 +35,6 @@ public class ThumbnailGenerator {
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         ImageIO.write(outImage, image.getExtension(), outputStream);
-        log.error(image.getExtension());
         return outputStream.toByteArray();
     }
 
