@@ -1,7 +1,7 @@
 package services;
 
-import model.ImageDto;
-import model.Image;
+import model.PictureDAO;
+import model.Picture;
 
 public class RetrofitService {
 
@@ -9,15 +9,15 @@ public class RetrofitService {
         return RetrofitClient.getClient().create(RetrofitInterface.class);
     }
 
-    public static void postImage(Image image, NetworkCallback<Integer> callback) {        
+    public static void postImage(Picture image, NetworkCallback<Integer> callback) {        
         getApInterface().postImage(image).enqueue(callback);
     }
 
-    public static void getImage(Integer id, NetworkCallback<ImageDto> callback) {        
+    public static void getImage(Integer id, NetworkCallback<PictureDAO> callback) {        
         getApInterface().getImage(id).enqueue(callback);
     }
 
-    public static void getThumbnail(Integer id, NetworkCallback<ImageDto> callback) {        
+    public static void getThumbnail(Integer id, NetworkCallback<PictureDAO> callback) {        
         getApInterface().getThumbnail(id).enqueue(callback);
     }
 }

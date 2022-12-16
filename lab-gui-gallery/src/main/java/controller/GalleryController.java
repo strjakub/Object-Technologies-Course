@@ -21,7 +21,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.zip.ZipFile;
 
-import model.Image;
+import model.Picture;
 
 import services.NetworkCallback;
 import services.RetrofitService;
@@ -36,14 +36,13 @@ public class GalleryController {
     private int columnIndex = 0;
 
     @FXML
-    private ImageController imageController;
+    private PictureController imageController;
 
     @FXML
     private GridPane gridPane;
 
     @FXML
     public void initialize() {
-        System.out.println("initializing");
         gridPane.setMinWidth(500);
         gridPane.setMinHeight(600);
         gridPane.setBackground(new Background(new BackgroundFill(Color.rgb(140, 200, 140), new CornerRadii(0), new Insets(0))));
@@ -55,7 +54,6 @@ public class GalleryController {
 
         var chooser = new FileChooser();
         var args = photosExtensions.stream().map(x -> String.format("*.%s", x)).toArray(String[]::new);
-        System.out.println(args);
         var filter = new FileChooser.ExtensionFilter("ZIP lub Images", args);
         chooser.getExtensionFilters().add(filter);
 
@@ -92,14 +90,14 @@ public class GalleryController {
             return;
         }
 
-        var image = new Image(bytes, extension);
+        var image = new Picture(bytes, extension);
         RetrofitService.postImage(image, new NetworkCallback<Integer>() {
             @Override
             public void process(Integer result) throws IOException {
                 var loader = new FXMLLoader();
-                loader.setLocation(GalleryController.class.getResource("../view/image.fxml"));
+                loader.setLocation(GalleryController.class.getResource("../view/picture.fxml"));
                 VBox rootLayout = loader.load();
-                ImageController controller = loader.getController();
+                PictureController controller = loader.getController();
                 controller.setId(result);
                 gridPane.add(rootLayout, columnIndex, rowIndex);
 
