@@ -5,9 +5,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -23,25 +21,21 @@ public class ImageController {
     private ProgressIndicator progress;
 
     @FXML
-    private Button button;
-
-    @FXML
     private VBox container;
 
     public void setId(Integer id) {
         this.id = id;
-        button.setText("Alibaba show: " + id.toString());
         RetrofitService.getThumbnail(id, new NetworkCallback<Dto>() {
             @Override
             public void process(Dto result) throws IOException {
                 var image = Dto.convertTo(result);
                 var img = new Image(new ByteArrayInputStream(image.getData()));
                 var imageView = new ImageView(img);
+                imageView.setOnMouseClicked(event -> { showPicture(); });
                 imageView.setFitHeight(100);
                 imageView.setFitWidth(100);
                 container.getChildren().remove(progress);
                 container.getChildren().add(imageView);
-                button.setDisable(false);
             }
         });
     }
@@ -50,12 +44,9 @@ public class ImageController {
         progress = new ProgressIndicator();
         progress.setMinSize(100, 100);
         container.getChildren().add(progress);
-        button.setDisable(true);
     }
 
-    @FXML
-    private void click(ActionEvent event) {
-        System.out.println("Clicked Alibaba " + id);
+    private void showPicture() {
         RetrofitService.getImage(id, new NetworkCallback<Dto>() {
             @Override
             public void process(Dto result) throws IOException {
