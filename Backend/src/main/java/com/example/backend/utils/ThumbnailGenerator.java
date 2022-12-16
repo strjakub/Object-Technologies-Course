@@ -1,13 +1,11 @@
-package com.example.backend.util;
+package com.example.backend.utils;
 
 import com.example.backend.model.Image;
-import com.example.backend.model.Thumbnail;
 import lombok.extern.slf4j.Slf4j;
 import org.imgscalr.Scalr;
 import org.springframework.stereotype.Component;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -40,7 +38,7 @@ public class ThumbnailGenerator {
         InputStream inputStream = new ByteArrayInputStream(image.getData());
         BufferedImage inputImage = ImageIO.read(inputStream);
 
-        BufferedImage outImage = Scalr.resize(inputImage, width);
+        BufferedImage outImage = Scalr.resize(inputImage, width, height);
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         ImageIO.write(outImage, image.getExtension(), outputStream);

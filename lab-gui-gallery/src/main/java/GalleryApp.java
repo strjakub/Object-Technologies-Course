@@ -21,7 +21,7 @@ public class GalleryApp extends Application {
     private void configureStage(Stage primaryStage, Pane rootLayout) {
         var scene = new Scene(rootLayout);
         primaryStage.setScene(scene);
-        primaryStage.setTitle("Galeria małych zdjęć");
+        primaryStage.setTitle("Thumbnail Gallery");
         primaryStage.minWidthProperty().bind(rootLayout.minWidthProperty());
         primaryStage.minHeightProperty().bind(rootLayout.minHeightProperty());
     }

@@ -14,7 +14,17 @@ public class NetworkCallback<T> implements Callback<T> {
     @Override
     public void onResponse(Call<T> call, Response<T> response) {
 
-        if (response == null) {
+        if (response.code() == 102) {
+            System.out.println("Got status code nr. 102");
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            call.clone().enqueue(this);
+            return;
+        }
+        if (response == null || response.code() == 500 || response.code() == 404) {
             call.cancel();
             System.out.println("Error while http request");
             System.out.println("response is null");

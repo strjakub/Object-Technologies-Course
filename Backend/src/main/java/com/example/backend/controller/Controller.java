@@ -3,15 +3,15 @@ package com.example.backend.controller;
 import com.example.backend.model.Image;
 import com.example.backend.service.ImageService;
 import com.example.backend.service.ThumbnailService;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.schedulers.Schedulers;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @RestController
 public class Controller {
 
@@ -34,6 +34,7 @@ public class Controller {
 
     @GetMapping(path = "thumbnail/{id}")
     public Single<ResponseEntity<String>> getThumbnail(@PathVariable int id) {
+        log.info("GOT REQUEST");
         return thumbnailService.getThumbnail(id).subscribeOn(Schedulers.io())
                 .map(res -> res.isEmpty()
                     ? new ResponseEntity<>("", HttpStatus.PROCESSING)
@@ -43,8 +44,9 @@ public class Controller {
 
     @PostMapping()
     public Single<ResponseEntity<Integer>> postImage(@RequestBody Image image) {
-        return Single.zip(imageService.uploadImage(image).subscribeOn(Schedulers.io()),
-                thumbnailService.generateThumbnail(image).subscribeOn(Schedulers.io()),
-                (a, b) -> new ResponseEntity<>(a, HttpStatus.OK));
+        thumbnailService.generateThumbnail(image);
+        return imageService.uploadImage(image).subscribeOn(Schedulers.io()).map(
+                res -> new ResponseEntity<>(res, HttpStatus.OK)
+        ).onErrorReturnItem(new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR));
     }
 }

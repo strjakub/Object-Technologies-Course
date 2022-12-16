@@ -59,7 +59,7 @@ public class PictureController {
                 var box = new HBox();
                 box.getChildren().add(imageView);
                 stage.setScene(new Scene(box));
-                stage.setTitle("Powiekszone zdjecie małego zdjecia");
+                stage.setTitle("Original Image");
                 stage.setResizable(false);
                 stage.initModality(Modality.WINDOW_MODAL);
                 stage.initOwner(container.getScene().getWindow() );

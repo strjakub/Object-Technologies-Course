@@ -4,13 +4,16 @@ import com.example.backend.model.Image;
 import com.example.backend.model.Thumbnail;
 import com.example.backend.repositories.ImageRepository;
 import com.example.backend.repositories.ThumbnailRepository;
-import com.example.backend.util.ThumbnailGenerator;
+import com.example.backend.utils.ThumbnailGenerator;
 import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class ThumbnailService {
 
@@ -40,14 +43,12 @@ public class ThumbnailService {
         });
     }
 
-    public Single<Thumbnail> generateThumbnail(Image img) {
-        return Single.create(subscriber -> {
+    public void generateThumbnail(Image img) {
+        Single<Thumbnail> call = Single.create(subscriber -> {
             Thumbnail thumbnail = new Thumbnail(generator.convertToThumbnail(img), img.getExtension(), img);
             Thumbnail res = thumbnailRepository.save(thumbnail);
-//            if (res.isEmpty()) {
-//                throw new EntityNotFoundException();
-//            }
             subscriber.onSuccess(res);
         });
+        call.subscribeOn(Schedulers.io()).observeOn(Schedulers.io()).subscribe();
     }
 }
