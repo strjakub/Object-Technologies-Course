@@ -1,7 +1,7 @@
 package services;
 
-import model.ImageDto;
-import model.Image;
+import model.PictureDAO;
+import model.Picture;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -12,11 +12,11 @@ import retrofit2.http.Path;
 public interface RetrofitInterface {
 
     @POST("/")
-    Call<Integer> postImage(@Body Image image);
+    Call<Integer> postImage(@Body Picture image);
 
     @GET("{id}")
-    Call<ImageDto> getImage(@Path("id") Integer id);
+    Call<PictureDAO> getImage(@Path("id") Integer id);
 
     @GET("thumbnail/{id}")
-    Call<ImageDto> getThumbnail(@Path("id") Integer id);
+    Call<PictureDAO> getThumbnail(@Path("id") Integer id);
 }

@@ -12,12 +12,12 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import model.ImageDto;
+import model.PictureDAO;
 
 import services.NetworkCallback;
 import services.RetrofitService;
 
-public class ImageController {
+public class PictureController {
 
     private Integer id;
     private ProgressIndicator progress;
@@ -27,10 +27,10 @@ public class ImageController {
 
     public void setId(Integer id) {
         this.id = id;
-        RetrofitService.getThumbnail(id, new NetworkCallback<ImageDto>() {
+        RetrofitService.getThumbnail(id, new NetworkCallback<PictureDAO>() {
             @Override
-            public void process(ImageDto result) throws IOException {
-                var image = ImageDto.convertTo(result);
+            public void process(PictureDAO result) throws IOException {
+                var image = PictureDAO.convertTo(result);
                 var img = new Image(new ByteArrayInputStream(image.getData()));
                 var imageView = new ImageView(img);
                 imageView.setOnMouseClicked(event -> { showPicture(); });
@@ -49,10 +49,10 @@ public class ImageController {
     }
 
     private void showPicture() {
-        RetrofitService.getImage(id, new NetworkCallback<ImageDto>() {
+        RetrofitService.getImage(id, new NetworkCallback<PictureDAO>() {
             @Override
-            public void process(ImageDto result) throws IOException {
-                var image = ImageDto.convertTo(result);
+            public void process(PictureDAO result) throws IOException {
+                var image = PictureDAO.convertTo(result);
                 var stage = new Stage();
                 var img = new Image(new ByteArrayInputStream(image.getData()));
                 var imageView = new ImageView(img);
@@ -60,6 +60,7 @@ public class ImageController {
                 box.getChildren().add(imageView);
                 stage.setScene(new Scene(box));
                 stage.setTitle("Powiekszone zdjecie małego zdjecia");
+                stage.setResizable(false);
                 stage.initModality(Modality.WINDOW_MODAL);
                 stage.initOwner(container.getScene().getWindow() );
                 stage.show();
