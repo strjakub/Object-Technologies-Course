@@ -1,6 +1,6 @@
 package services;
 
-import model.Dto;
+import model.ImageDto;
 import model.Image;
 
 public class RetrofitService {
@@ -13,11 +13,11 @@ public class RetrofitService {
         getApInterface().postImage(image).enqueue(callback);
     }
 
-    public static void getImage(Integer id, NetworkCallback<Dto> callback) {        
+    public static void getImage(Integer id, NetworkCallback<ImageDto> callback) {        
         getApInterface().getImage(id).enqueue(callback);
     }
 
-    public static void getThumbnail(Integer id, NetworkCallback<Dto> callback) {        
+    public static void getThumbnail(Integer id, NetworkCallback<ImageDto> callback) {        
         getApInterface().getThumbnail(id).enqueue(callback);
     }
 }
