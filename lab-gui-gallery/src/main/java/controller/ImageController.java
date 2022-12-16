@@ -12,7 +12,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import model.Dto;
+import model.ImageDto;
 
 import services.NetworkCallback;
 import services.RetrofitService;
@@ -27,10 +27,10 @@ public class ImageController {
 
     public void setId(Integer id) {
         this.id = id;
-        RetrofitService.getThumbnail(id, new NetworkCallback<Dto>() {
+        RetrofitService.getThumbnail(id, new NetworkCallback<ImageDto>() {
             @Override
-            public void process(Dto result) throws IOException {
-                var image = Dto.convertTo(result);
+            public void process(ImageDto result) throws IOException {
+                var image = ImageDto.convertTo(result);
                 var img = new Image(new ByteArrayInputStream(image.getData()));
                 var imageView = new ImageView(img);
                 imageView.setOnMouseClicked(event -> { showPicture(); });
@@ -49,10 +49,10 @@ public class ImageController {
     }
 
     private void showPicture() {
-        RetrofitService.getImage(id, new NetworkCallback<Dto>() {
+        RetrofitService.getImage(id, new NetworkCallback<ImageDto>() {
             @Override
-            public void process(Dto result) throws IOException {
-                var image = Dto.convertTo(result);
+            public void process(ImageDto result) throws IOException {
+                var image = ImageDto.convertTo(result);
                 var stage = new Stage();
                 var img = new Image(new ByteArrayInputStream(image.getData()));
                 var imageView = new ImageView(img);
