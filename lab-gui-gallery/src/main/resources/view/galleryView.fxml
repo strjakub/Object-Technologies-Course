@@ -5,9 +5,9 @@
 <?import javafx.scene.control.Button?>
 
 <Pane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            minHeight="550.0" minWidth="850.0"
-            fx:controller="controller.GalleryController">
+        xmlns:fx="http://javafx.com/fxml"
+        minHeight="550.0" minWidth="850.0"
+        fx:controller="controller.GalleryController">
     <HBox>
         <Button text="Wstaw" onAction="#sendData"/>
         <GridPane fx:id="gridPane"></GridPane>

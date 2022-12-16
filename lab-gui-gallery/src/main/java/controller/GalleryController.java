@@ -19,7 +19,6 @@ import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.zip.ZipFile;
 
-import model.Gallery;
 import model.Image;
 
 import services.NetworkCallback;
@@ -31,8 +30,6 @@ public class GalleryController {
 
     private int rowIndex = 0;
     private int columnIndex = 0;
-
-    private Gallery galleryModel;
 
     @FXML
     private ImageController imageController;
@@ -46,10 +43,6 @@ public class GalleryController {
         gridPane.setMinWidth(500);
         gridPane.setMinHeight(600);
         gridPane.setBackground(new Background(new BackgroundFill(Color.rgb(140, 200, 140), new CornerRadii(0), new Insets(0))));
-    }
-
-    public void setModel(Gallery gallery) {
-        this.galleryModel = gallery;
     }
 
     @FXML
