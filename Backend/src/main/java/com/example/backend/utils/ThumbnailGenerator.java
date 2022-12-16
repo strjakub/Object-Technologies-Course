@@ -11,6 +11,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Random;
 
 @Component
 @Slf4j
@@ -20,16 +21,11 @@ public class ThumbnailGenerator {
 
     private final int height = 300;
 
+    private final Random random = new Random();
+
     public byte[] convertToThumbnail(Image image) throws IOException {
         log.info(String.format("...Converting photo... : size = %s", image.getData().length));
         var result = resize(image);
-
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-
         log.info(String.format("...Converted photo... : id = %s, size = %s", image.getId(), image.getData().length));
         return result;
     }
@@ -37,11 +33,17 @@ public class ThumbnailGenerator {
     private byte[] resize(Image image) throws IOException {
         InputStream inputStream = new ByteArrayInputStream(image.getData());
         BufferedImage inputImage = ImageIO.read(inputStream);
-
         BufferedImage outImage = Scalr.resize(inputImage, width, height);
-
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         ImageIO.write(outImage, image.getExtension(), outputStream);
+
+        try {
+            var time = random.nextInt(2, 10) * 1000;
+            Thread.sleep(time);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
         return outputStream.toByteArray();
     }
 
