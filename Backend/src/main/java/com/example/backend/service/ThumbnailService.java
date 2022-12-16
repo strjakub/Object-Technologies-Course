@@ -25,7 +25,7 @@ public class ThumbnailService {
         this.generator = generator;
     }
 
-    public Single<Thumbnail> getThumbnail(int id) {
+    public Single<Optional<Thumbnail>> getThumbnail(int id) {
         return Single.create(subscriber -> {
             Optional<Image> img = imageRepository.findById(id);
             if (img.isEmpty()) {
@@ -33,9 +33,10 @@ public class ThumbnailService {
             }
             Optional<Thumbnail> res = thumbnailRepository.findByImage_Id(img.get());
             if (res.isEmpty()) {
-                throw new EntityNotFoundException();
+                subscriber.onSuccess(Optional.empty());
+                return;
             }
-            subscriber.onSuccess(res.get());
+            subscriber.onSuccess(Optional.of(res.get()));
         });
     }
 
