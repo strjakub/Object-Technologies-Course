@@ -35,7 +35,9 @@ public class Controller {
     @GetMapping(path = "thumbnail/{id}")
     public Single<ResponseEntity<String>> getThumbnail(@PathVariable int id) {
         return thumbnailService.getThumbnail(id).subscribeOn(Schedulers.io())
-                .map(res -> new ResponseEntity<>(mapper.writeValueAsString(res), HttpStatus.OK))
+                .map(res -> res.isEmpty()
+                    ? new ResponseEntity<>("", HttpStatus.PROCESSING)
+                    : new ResponseEntity<>(mapper.writeValueAsString(res.get()), HttpStatus.OK))
                 .onErrorReturnItem(new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
     }
 
