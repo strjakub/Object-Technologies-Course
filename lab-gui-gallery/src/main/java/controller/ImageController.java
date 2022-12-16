@@ -1,6 +1,8 @@
 package controller;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 import javafx.event.ActionEvent;
@@ -19,8 +21,6 @@ public class ImageController {
 
     private Integer id;
     private ProgressIndicator progress;
-    private model.Image image;
-    private model.Image thumbnail;
 
     @FXML
     private Button button;
@@ -31,18 +31,6 @@ public class ImageController {
     public void setId(Integer id) {
         this.id = id;
         button.setText("Alibaba show: " + id.toString());
-    }
-
-    public void initialize() {
-        progress = new ProgressIndicator();
-        progress.setMinSize(100, 100);
-        container.getChildren().add(progress);
-        // button.setDisable(true);
-    }
-
-    @FXML
-    private void click(ActionEvent event) {
-        System.out.println("Clicked Alibaba " + id);
         RetrofitService.getThumbnail(id, new NetworkCallback<Dto>() {
             @Override
             public void process(Dto result) throws IOException {
@@ -53,6 +41,33 @@ public class ImageController {
                 imageView.setFitWidth(100);
                 container.getChildren().remove(progress);
                 container.getChildren().add(imageView);
+                button.setDisable(false);
+            }
+        });
+    }
+
+    public void initialize() {
+        progress = new ProgressIndicator();
+        progress.setMinSize(100, 100);
+        container.getChildren().add(progress);
+        button.setDisable(true);
+    }
+
+    @FXML
+    private void click(ActionEvent event) {
+        System.out.println("Clicked Alibaba " + id);
+        RetrofitService.getImage(id, new NetworkCallback<Dto>() {
+            @Override
+            public void process(Dto result) throws IOException {
+                var image = Dto.convertTo(result);
+
+                var file = File.createTempFile("ddddd", "." + image.getExtension());
+                try (var fos = new FileOutputStream(file)) {
+                    fos.write(image.getData());
+                }
+                
+                String expr = "rundll32 \"C:\\Program Files (x86)\\Windows Photo Viewer\\PhotoViewer.dll\", ImageView_Fullscreen " + file.getAbsolutePath();
+                Runtime.getRuntime().exec(expr);                
             }
         });
     }
