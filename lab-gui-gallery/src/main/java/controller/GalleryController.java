@@ -5,6 +5,9 @@ import javafx.stage.FileChooser;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
@@ -86,7 +89,8 @@ public class GalleryController {
     private void sendOneImage(byte[] bytes, String extension) throws IOException {
 
         if (extension == "zip" || photosExtensions.stream().allMatch(e -> !e.equals(extension))) {
-            System.out.println("Bledne rozszerzenie, dozwolone tylko zdjecia");
+            var alert = new Alert(AlertType.CONFIRMATION, "Bledne rozszerzenie, dozwolone tylko zdjecia", ButtonType.YES);
+            alert.showAndWait();
             return;
         }
 
