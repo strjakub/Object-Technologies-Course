@@ -43,7 +43,7 @@ public class GalleryController {
     @FXML
     public void initialize() {
         System.out.println("initializing");
-        gridPane.setMinWidth(565);
+        gridPane.setMinWidth(500);
         gridPane.setMinHeight(600);
         gridPane.setBackground(new Background(new BackgroundFill(Color.rgb(140, 200, 140), new CornerRadii(0), new Insets(0))));
     }

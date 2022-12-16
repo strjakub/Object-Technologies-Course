@@ -17,10 +17,9 @@ public class NetworkCallback<T> implements Callback<T> {
         if (response == null) {
             call.cancel();
             System.out.println("Error while http request");
+            System.out.println("response is null");
             return;
         }
-
-        System.out.println("Http ok");
 
         var result = response.body();
         Platform.runLater(new Runnable() {
