@@ -23,7 +23,6 @@ public class NetworkCallback<T> implements Callback<T> {
         var code = response.code();
 
         if (code == 102) {
-            System.out.println("Got status code nr. 102");
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
