@@ -16,7 +16,9 @@ import javafx.event.ActionEvent;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.zip.ZipFile;
 
 import model.Image;
@@ -27,6 +29,8 @@ import services.RetrofitService;
 import util.ImageHelper;
 
 public class GalleryController {
+
+    private final List<String> photosExtensions = Arrays.asList("png", "jpg", "bmp", "zip");
 
     private int rowIndex = 0;
     private int columnIndex = 0;
@@ -50,7 +54,9 @@ public class GalleryController {
         event.consume();
 
         var chooser = new FileChooser();
-        var filter = new FileChooser.ExtensionFilter("ZIP lub PNG files", "*.zip", "*.png");
+        var args = photosExtensions.stream().map(x -> String.format("*.%s", x)).toArray(String[]::new);
+        System.out.println(args);
+        var filter = new FileChooser.ExtensionFilter("ZIP lub Images", args);
         chooser.getExtensionFilters().add(filter);
 
         var file = chooser.showOpenDialog(new Stage());
@@ -64,7 +70,8 @@ public class GalleryController {
         if (extension.equals("zip")) {
             var zip = new ZipFile(absolutePath);
             for (var entry: Collections.list(zip.entries())) {
-                if (entry.getName().endsWith("png")) {
+                if (photosExtensions.stream().anyMatch(e -> !entry.getName().endsWith("zip") 
+                && entry.getName().endsWith(e))) {
                     var stream = zip.getInputStream(entry);
                     var bytes = stream.readAllBytes();
                     var ext = ImageHelper.getExtension(entry.getName());
@@ -80,8 +87,8 @@ public class GalleryController {
 
     private void sendOneImage(byte[] bytes, String extension) throws IOException {
 
-        if (!extension.equals("png")) {
-            System.out.println("Dopuszczalne rozszerzenie to png, a jest: " + extension);
+        if (extension == "zip" || photosExtensions.stream().allMatch(e -> !e.equals(extension))) {
+            System.out.println("Bledne rozszerzenie, dozwolone tylko zdjecia");
             return;
         }
 
