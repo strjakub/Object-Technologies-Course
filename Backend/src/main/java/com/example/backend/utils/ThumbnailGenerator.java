@@ -17,9 +17,9 @@ import java.util.Random;
 @Slf4j
 public class ThumbnailGenerator {
 
-    private final int width = 300;
+    private static final int WIDTH = 300;
 
-    private final int height = 300;
+    private static final int HEIGHT = 300;
 
     private final Random random = new Random();
 
@@ -33,7 +33,7 @@ public class ThumbnailGenerator {
     private byte[] resize(Image image) throws IOException {
         InputStream inputStream = new ByteArrayInputStream(image.getData());
         BufferedImage inputImage = ImageIO.read(inputStream);
-        BufferedImage outImage = Scalr.resize(inputImage, width, height);
+        BufferedImage outImage = Scalr.resize(inputImage, WIDTH, HEIGHT);
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         ImageIO.write(outImage, image.getExtension(), outputStream);
 
