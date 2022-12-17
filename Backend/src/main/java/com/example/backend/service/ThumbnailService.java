@@ -49,6 +49,6 @@ public class ThumbnailService {
             Thumbnail res = thumbnailRepository.save(thumbnail);
             subscriber.onSuccess(res);
         });
-        call.subscribeOn(Schedulers.io()).observeOn(Schedulers.io()).subscribe();
+        call.subscribeOn(Schedulers.computation()).subscribe();
     }
 }

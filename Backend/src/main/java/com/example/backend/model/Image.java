@@ -32,6 +32,11 @@ public class Image {
 
     public Image() {}
 
+    public Image(byte[] data, String extension) {
+        this.data = data;
+        this.extension = extension;
+    }
+
     public int getId() {
         return id;
     }
@@ -50,11 +55,6 @@ public class Image {
 
     public void setThumbnail(Thumbnail thumbnail) {
         this.thumbnail = thumbnail;
-    }
-
-    public Image(byte[] data, String extension) {
-        this.data = data;
-        this.extension = extension;
     }
 
     public static class Columns {
