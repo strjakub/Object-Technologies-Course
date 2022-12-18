@@ -13,7 +13,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.PictureDAO;
-
 import services.NetworkCallback;
 import services.RetrofitService;
 
