@@ -33,7 +33,9 @@ import util.ImageHelper;
 
 public class GalleryController {
 
-    private final List<String> photosExtensions = Arrays.asList("png", "jpg", "bmp", "zip");
+    private static final List<String> photosExtensions = Arrays.asList("png", "jpg", "bmp", "zip");
+    private static final int NUMBER_OF_COLUMNS = 5;
+    private static final int NUMBER_OF_ROWS = 6;
 
     private int rowIndex = 0;
     private int columnIndex = 0;
@@ -46,9 +48,9 @@ public class GalleryController {
 
     @FXML
     public void initialize() {
-        gridPane.setMinWidth(500);
-        gridPane.setMinHeight(600);
-        gridPane.setBackground(new Background(new BackgroundFill(Color.rgb(140, 200, 140), new CornerRadii(0), new Insets(0))));
+        gridPane.setMinWidth(NUMBER_OF_COLUMNS * PictureController.PICTURE_SIZE);
+        gridPane.setMinHeight(NUMBER_OF_ROWS * PictureController.PICTURE_SIZE);
+        gridPane.setBackground(new Background(new BackgroundFill(Color.AQUAMARINE, new CornerRadii(0), new Insets(0))));
     }
 
     @FXML
@@ -105,7 +107,7 @@ public class GalleryController {
                 controller.setId(result);
                 gridPane.add(rootLayout, columnIndex, rowIndex);
 
-                if (columnIndex == 4) {
+                if (columnIndex == NUMBER_OF_COLUMNS - 1) {
                     columnIndex = 0;
                     rowIndex++;
                 }
