@@ -13,10 +13,13 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.PictureDAO;
+import services.IRetrofitService;
 import services.NetworkCallback;
 import services.RetrofitService;
 
 public class PictureController {
+
+    private final IRetrofitService retrofitService = RetrofitService.Instance;
 
     public static final int PICTURE_SIZE = 100;
 
@@ -28,7 +31,7 @@ public class PictureController {
 
     public void setId(Integer id) {
         this.id = id;
-        RetrofitService.getThumbnail(id, new NetworkCallback<PictureDAO>() {
+        retrofitService.getThumbnail(id, new NetworkCallback<PictureDAO>() {
             @Override
             public void process(PictureDAO result) throws IOException {
                 var image = PictureDAO.convertTo(result);
@@ -50,7 +53,7 @@ public class PictureController {
     }
 
     private void showPicture() {
-        RetrofitService.getImage(id, new NetworkCallback<PictureDAO>() {
+        retrofitService.getImage(id, new NetworkCallback<PictureDAO>() {
             @Override
             public void process(PictureDAO result) throws IOException {
                 var image = PictureDAO.convertTo(result);

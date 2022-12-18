@@ -6,19 +6,23 @@ import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class RetrofitClient {
+public class RetrofitClient implements IRetrofitClient  {
 
-    public static String BASE_URL ="http://localhost:8080/";
-    private static Retrofit retrofit;
+    public static final IRetrofitClient Instance = new RetrofitClient();
 
-    public static Retrofit getClient() {
+    private static final int TIMEOUT = 60;
+    private static final String BASE_URL ="http://localhost:8080/";
+    
+    private Retrofit retrofit;
+
+    public Retrofit getClient() {
 
         if (retrofit == null) {
 
             var okHttpClient = new OkHttpClient().newBuilder()
-                .connectTimeout(60, TimeUnit.SECONDS)
-                .readTimeout(60, TimeUnit.SECONDS)
-                .writeTimeout(60, TimeUnit.SECONDS)
+                .connectTimeout(TIMEOUT, TimeUnit.SECONDS)
+                .readTimeout(TIMEOUT, TimeUnit.SECONDS)
+                .writeTimeout(TIMEOUT, TimeUnit.SECONDS)
                 .build();
 
             retrofit = new Retrofit.Builder()

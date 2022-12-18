@@ -23,6 +23,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import model.Picture;
 import services.IPhotosService;
+import services.IRetrofitService;
 import services.NetworkCallback;
 import services.PhotosService;
 import services.RetrofitService;
@@ -33,6 +34,7 @@ public class GalleryController {
     private static final int NUMBER_OF_ROWS = 6;
 
     private final IPhotosService photosService = new PhotosService();
+    private final IRetrofitService retrofitService = RetrofitService.Instance;
 
     private int rowIndex = 0;
     private int columnIndex = 0;
@@ -93,7 +95,7 @@ public class GalleryController {
         }
 
         var image = new Picture(bytes, extension);
-        RetrofitService.postImage(image, new NetworkCallback<Integer>() {
+        retrofitService.postImage(image, new NetworkCallback<Integer>() {
             @Override
             public void process(Integer result) throws IOException {
                 var loader = new FXMLLoader();
