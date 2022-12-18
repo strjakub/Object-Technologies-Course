@@ -19,6 +19,8 @@ import services.RetrofitService;
 
 public class PictureController {
 
+    private static final int IMAGE_SIZE = 100;
+
     private Integer id;
     private ProgressIndicator progress;
 
@@ -34,8 +36,8 @@ public class PictureController {
                 var img = new Image(new ByteArrayInputStream(image.getData()));
                 var imageView = new ImageView(img);
                 imageView.setOnMouseClicked(event -> { showPicture(); });
-                imageView.setFitHeight(100);
-                imageView.setFitWidth(100);
+                imageView.setFitHeight(IMAGE_SIZE);
+                imageView.setFitWidth(IMAGE_SIZE);
                 container.getChildren().remove(progress);
                 container.getChildren().add(imageView);
             }
