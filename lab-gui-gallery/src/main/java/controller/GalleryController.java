@@ -19,23 +19,21 @@ import javafx.event.ActionEvent;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 import java.util.zip.ZipFile;
 
 import model.Picture;
-
+import services.IPhotosService;
 import services.NetworkCallback;
+import services.PhotosService;
 import services.RetrofitService;
-
-import util.ImageHelper;
 
 public class GalleryController {
 
-    private static final List<String> photosExtensions = Arrays.asList("png", "jpg", "bmp", "zip");
     private static final int NUMBER_OF_COLUMNS = 5;
     private static final int NUMBER_OF_ROWS = 6;
+
+    private final IPhotosService photosService = new PhotosService();
 
     private int rowIndex = 0;
     private int columnIndex = 0;
@@ -58,7 +56,7 @@ public class GalleryController {
         event.consume();
 
         var chooser = new FileChooser();
-        var args = photosExtensions.stream().map(x -> String.format("*.%s", x)).toArray(String[]::new);
+        var args = photosService.getExtensionFilter();
         var filter = new FileChooser.ExtensionFilter("ZIP lub Images", args);
         chooser.getExtensionFilters().add(filter);
 
@@ -68,16 +66,15 @@ public class GalleryController {
         }
 
         var absolutePath = file.getAbsolutePath();
-        var extension = ImageHelper.getExtension(absolutePath);
+        var extension = photosService.getExtension(absolutePath);
 
         if (extension.equals("zip")) {
             var zip = new ZipFile(absolutePath);
             for (var entry: Collections.list(zip.entries())) {
-                if (photosExtensions.stream().anyMatch(e -> !entry.getName().endsWith("zip") 
-                && entry.getName().endsWith(e))) {
+                var ext = photosService.getExtension(entry.getName());
+                if (photosService.isPhoto(ext)) {
                     var stream = zip.getInputStream(entry);
                     var bytes = stream.readAllBytes();
-                    var ext = ImageHelper.getExtension(entry.getName());
                     sendOneImage(bytes, ext);
                 }
             }
@@ -90,7 +87,7 @@ public class GalleryController {
 
     private void sendOneImage(byte[] bytes, String extension) throws IOException {
 
-        if (extension == "zip" || photosExtensions.stream().allMatch(e -> !e.equals(extension))) {
+        if (!photosService.isPhoto(extension)) {
             var alert = new Alert(AlertType.CONFIRMATION, "Bledne rozszerzenie, dozwolone tylko zdjecia", ButtonType.YES);
             alert.showAndWait();
             return;
@@ -119,7 +116,7 @@ public class GalleryController {
     }
 
     private void sendOneImage(String fullPath) throws IOException {
-        var extension = ImageHelper.getExtension(fullPath);
+        var extension = photosService.getExtension(fullPath);
         var path  = Paths.get(fullPath);
         var bytes = Files.readAllBytes(path);
         sendOneImage(bytes, extension);
