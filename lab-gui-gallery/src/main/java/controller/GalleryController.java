@@ -1,18 +1,11 @@
 package controller;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Collections;
-import java.util.zip.ZipFile;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.ButtonType;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
@@ -21,12 +14,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import model.Picture;
 import services.IPhotosService;
-import services.IRetrofitService;
 import services.NetworkCallback;
 import services.PhotosService;
-import services.RetrofitService;
 
 public class GalleryController {
 
@@ -34,7 +24,6 @@ public class GalleryController {
     private static final int NUMBER_OF_ROWS = 6;
 
     private final IPhotosService photosService = new PhotosService();
-    private final IRetrofitService retrofitService = RetrofitService.Instance;
 
     private int rowIndex = 0;
     private int columnIndex = 0;
@@ -66,36 +55,7 @@ public class GalleryController {
             return;
         }
 
-        var absolutePath = file.getAbsolutePath();
-        var extension = photosService.getExtension(absolutePath);
-
-        if (extension.equals("zip")) {
-            var zip = new ZipFile(absolutePath);
-            for (var entry: Collections.list(zip.entries())) {
-                var ext = photosService.getExtension(entry.getName());
-                if (photosService.isPhoto(ext)) {
-                    var stream = zip.getInputStream(entry);
-                    var bytes = stream.readAllBytes();
-                    sendOneImage(bytes, ext);
-                }
-            }
-            zip.close();
-            return;
-        }
-
-        sendOneImage(absolutePath);
-    }
-
-    private void sendOneImage(byte[] bytes, String extension) throws IOException {
-
-        if (!photosService.isPhoto(extension)) {
-            var alert = new Alert(AlertType.CONFIRMATION, "Bledne rozszerzenie, dozwolone tylko zdjecia", ButtonType.YES);
-            alert.showAndWait();
-            return;
-        }
-
-        var image = new Picture(bytes, extension);
-        retrofitService.postImage(image, new NetworkCallback<Integer>() {
+        photosService.postFile(file, new NetworkCallback<Integer>() {
             @Override
             public void process(Integer result) throws IOException {
                 var loader = new FXMLLoader();
@@ -114,12 +74,5 @@ public class GalleryController {
                 }
             }
         });
-    }
-
-    private void sendOneImage(String fullPath) throws IOException {
-        var extension = photosService.getExtension(fullPath);
-        var path  = Paths.get(fullPath);
-        var bytes = Files.readAllBytes(path);
-        sendOneImage(bytes, extension);
     }
 }
