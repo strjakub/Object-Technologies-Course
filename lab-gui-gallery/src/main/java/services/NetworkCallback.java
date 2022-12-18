@@ -9,6 +9,9 @@ import retrofit2.Response;
 
 public class NetworkCallback<T> implements Callback<T> {
 
+    private static final int HTTP_PROCESSING = 102;
+    private static final int DELAY_IN_MILISECONDS = 1000;
+
     public void process(T result) throws IOException {}
 
     @Override
@@ -22,9 +25,9 @@ public class NetworkCallback<T> implements Callback<T> {
 
         var code = response.code();
 
-        if (code == 102) {
+        if (code == HTTP_PROCESSING) {
             try {
-                Thread.sleep(1000);
+                Thread.sleep(DELAY_IN_MILISECONDS);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
