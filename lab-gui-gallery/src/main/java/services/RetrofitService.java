@@ -1,7 +1,7 @@
 package services;
 
-import model.PictureDAO;
 import model.Picture;
+import model.PictureDAO;
 
 public class RetrofitService {
 

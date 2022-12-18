@@ -1,8 +1,7 @@
 package services;
 
-import model.PictureDAO;
 import model.Picture;
-
+import model.PictureDAO;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
