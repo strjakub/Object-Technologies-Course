@@ -39,15 +39,12 @@ public class NetworkCallback<T> implements Callback<T> {
         }
 
         var result = response.body();
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    process(result);
-                }
-                catch (IOException e) {
-                    e.getStackTrace();
-                }
+        Platform.runLater(() -> {
+            try {
+                process(result);
+            }
+            catch (IOException e) {
+                e.getStackTrace();
             }
         });
 
