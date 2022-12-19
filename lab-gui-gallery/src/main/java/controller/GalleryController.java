@@ -16,16 +16,13 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import services.FileService;
 import services.IFileService;
-import services.IPhotosService;
 import services.NetworkCallback;
-import services.PhotosService;
 
 public class GalleryController {
 
     private static final int NUMBER_OF_COLUMNS = 5;
     private static final int NUMBER_OF_ROWS = 6;
 
-    private final IPhotosService photosService = new PhotosService();
     private final IFileService fileService = new FileService();
 
     private int rowIndex = 0;
@@ -49,7 +46,7 @@ public class GalleryController {
         event.consume();
 
         var chooser = new FileChooser();
-        var args = photosService.getExtensionFilter();
+        var args = fileService.getExtensionFilter();
         var filter = new FileChooser.ExtensionFilter("ZIP lub Images", args);
         chooser.getExtensionFilters().add(filter);
 
