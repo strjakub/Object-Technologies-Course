@@ -14,6 +14,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import services.FileService;
+import services.IFileService;
 import services.IPhotosService;
 import services.NetworkCallback;
 import services.PhotosService;
@@ -24,6 +26,7 @@ public class GalleryController {
     private static final int NUMBER_OF_ROWS = 6;
 
     private final IPhotosService photosService = new PhotosService();
+    private final IFileService fileService = new FileService();
 
     private int rowIndex = 0;
     private int columnIndex = 0;
@@ -55,7 +58,7 @@ public class GalleryController {
             return;
         }
 
-        photosService.postFile(file, new NetworkCallback<Integer>() {
+        fileService.postFile(file, new NetworkCallback<Integer>() {
             @Override
             public void process(Integer result) throws IOException {
                 var loader = new FXMLLoader();
