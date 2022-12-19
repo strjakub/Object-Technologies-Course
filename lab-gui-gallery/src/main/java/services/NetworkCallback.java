@@ -2,12 +2,17 @@ package services;
 
 import java.io.IOException;
 
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import javafx.application.Platform;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class NetworkCallback<T> implements Callback<T> {
+
+    private static final Logger logger = LogManager.getLogger(NetworkCallback.class);
 
     private static final int HTTP_PROCESSING = 102;
     private static final int DELAY_IN_MILISECONDS = 1000;
@@ -19,7 +24,7 @@ public class NetworkCallback<T> implements Callback<T> {
 
         if (response == null) {
             call.cancel();
-            System.out.println("Error, http response is null");
+            logger.debug("Error, http response is null");
             return;
         }
 
@@ -37,7 +42,7 @@ public class NetworkCallback<T> implements Callback<T> {
 
         if (400 <= code && code < 600) {
             call.cancel();
-            System.out.println("Error while http request");
+            logger.debug("Error while http request");
             return;
         }
 
@@ -56,8 +61,8 @@ public class NetworkCallback<T> implements Callback<T> {
     @Override
     public void onFailure(Call<T> call, Throwable t) {
         call.cancel();
-        System.out.println("Error while http request");
-        System.out.println(t.getMessage());
-        System.out.println(t.toString());
+        logger.debug("Error while http request");
+        logger.debug(t.getMessage());
+        logger.debug(t.toString());
     }
 }
