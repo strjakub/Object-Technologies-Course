@@ -8,7 +8,11 @@ import model.Picture;
 
 public class PhotoFileSender implements IFileSender {
 
-    private final IRetrofitService retrofitService = RetrofitService.Instance;
+    private final IRetrofitService retrofitService;
+
+    public PhotoFileSender(IRetrofitService retrofitService) {
+        this.retrofitService = retrofitService;
+    }
 
     @Override
     public void sendFile(String fullPath, NetworkCallback<Integer> callback) throws IOException {

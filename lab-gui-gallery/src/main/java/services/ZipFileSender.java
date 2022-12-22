@@ -8,7 +8,11 @@ import model.Picture;
 
 public class ZipFileSender implements IFileSender {
 
-    private final IRetrofitService retrofitService = RetrofitService.Instance;
+    private final IRetrofitService retrofitService;
+
+    public ZipFileSender(IRetrofitService retrofitService) {
+        this.retrofitService = retrofitService;
+    }
 
     @Override
     public void sendFile(String fullPath, NetworkCallback<Integer> callback) throws IOException {
