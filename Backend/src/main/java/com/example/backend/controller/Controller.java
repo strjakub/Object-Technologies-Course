@@ -36,13 +36,12 @@ public class Controller {
 
     @GetMapping(path = "thumbnail/{id}")
     public Single<ResponseEntity<String>> getThumbnail(@PathVariable int id) {
-
-//        Maybe<Thumbnail> res = thumbnailService.getThumbnail(id).subscribeOn(Schedulers.computation());
-//        return imageService.getImage(id)
-//                .map(i -> thumbnailService.getThumbnail(i))
-//                .map()
-//                .defaultIfEmpty(new ResponseEntity<>(null, HttpStatus.NOT_FOUND))
-        return null;
+        log.info("GOT REQUEST");
+        return thumbnailService.getThumbnail(id).subscribeOn(Schedulers.io())
+                .map(res -> res.isEmpty()
+                        ? new ResponseEntity<>("", HttpStatus.PROCESSING)
+                        : new ResponseEntity<>(mapper.writeValueAsString(res.get()), HttpStatus.OK))
+                .onErrorReturnItem(new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
     }
 
     @PostMapping()
