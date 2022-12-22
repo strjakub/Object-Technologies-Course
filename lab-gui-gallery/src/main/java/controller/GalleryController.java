@@ -14,16 +14,14 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import services.FileService;
-import services.IFileService;
+import services.FileSenderStrategyBuilder;
+import services.File;
 import services.NetworkCallback;
 
 public class GalleryController {
 
     private static final int NUMBER_OF_COLUMNS = 5;
     private static final int NUMBER_OF_ROWS = 6;
-
-    private final IFileService fileService = new FileService();
 
     private int rowIndex = 0;
     private int columnIndex = 0;
@@ -46,7 +44,7 @@ public class GalleryController {
         event.consume();
 
         var chooser = new FileChooser();
-        var args = fileService.getExtensionFilter();
+        var args = File.getExtensionFilter();
         var filter = new FileChooser.ExtensionFilter("ZIP lub Images", args);
         chooser.getExtensionFilters().add(filter);
 
@@ -55,7 +53,9 @@ public class GalleryController {
             return;
         }
 
-        fileService.postFile(file, new NetworkCallback<Integer>() {
+        var absolutePath = file.getAbsolutePath();
+        var extension = File.getExtension(absolutePath);
+        FileSenderStrategyBuilder.Build(extension).sendFile(absolutePath, new NetworkCallback<Integer>() {
             @Override
             public void process(Integer result) throws IOException {
                 var loader = new FXMLLoader();
