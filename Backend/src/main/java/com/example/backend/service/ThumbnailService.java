@@ -2,12 +2,10 @@ package com.example.backend.service;
 
 import com.example.backend.model.Image;
 import com.example.backend.model.Thumbnail;
-import com.example.backend.model.ThumbnailOption;
 import com.example.backend.repositories.ImageRepository;
 import com.example.backend.repositories.ThumbnailRepository;
 import com.example.backend.utils.ThumbnailGenerator;
 import io.reactivex.rxjava3.core.Completable;
-import io.reactivex.rxjava3.core.Maybe;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import lombok.extern.slf4j.Slf4j;
@@ -47,6 +45,9 @@ public class ThumbnailService {
     }
 
     public void generateThumbnail(Image img) {
-        Completable.fromAction(() -> {}).subscribeOn(Schedulers.computation()).subscribe();
+        Completable.fromAction(() -> {
+            Thumbnail thumbnail = new Thumbnail(generator.convertToThumbnail(img), img.getExtension(), img);
+            thumbnailRepository.save(thumbnail);
+        }).subscribeOn(Schedulers.computation()).subscribe();
     }
 }
