@@ -12,22 +12,23 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import model.Picture;
 import model.PictureDAO;
 import services.IRetrofitService;
 import services.NetworkCallback;
-import services.RetrofitService;
 
 public class PictureController {
 
-    private final IRetrofitService retrofitService = RetrofitService.Instance;
-
-    public static final int PICTURE_SIZE = 100;
-
+    private final IRetrofitService retrofitService;
     private Integer id;
     private ProgressIndicator progress;
 
     @FXML
     private VBox container;
+
+    public PictureController(IRetrofitService retrofitService) {
+        this.retrofitService = retrofitService;
+    }
 
     public void setId(Integer id) {
         this.id = id;
@@ -38,8 +39,8 @@ public class PictureController {
                 var img = new Image(new ByteArrayInputStream(image.getData()));
                 var imageView = new ImageView(img);
                 imageView.setOnMouseClicked(event -> { showPicture(); });
-                imageView.setFitHeight(PICTURE_SIZE);
-                imageView.setFitWidth(PICTURE_SIZE);
+                imageView.setFitHeight(Picture.SIZE);
+                imageView.setFitWidth(Picture.SIZE);
                 container.getChildren().remove(progress);
                 container.getChildren().add(imageView);
             }
@@ -48,7 +49,7 @@ public class PictureController {
 
     public void initialize() {
         progress = new ProgressIndicator();
-        progress.setMinSize(PICTURE_SIZE, PICTURE_SIZE);
+        progress.setMinSize(Picture.SIZE, Picture.SIZE);
         container.getChildren().add(progress);
     }
 

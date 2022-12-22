@@ -5,6 +5,7 @@ import java.io.IOException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.JavaFXBuilderFactory;
 import javafx.geometry.Insets;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -14,7 +15,10 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.Callback;
+import model.Picture;
 import services.FileSenderStrategyBuilder;
+import services.IRetrofitService;
 import services.File;
 import services.NetworkCallback;
 
@@ -26,16 +30,22 @@ public class GalleryController {
     private int rowIndex = 0;
     private int columnIndex = 0;
 
+    private final IRetrofitService retrofitService;
+
     @FXML
     private PictureController imageController;
 
     @FXML
     private GridPane gridPane;
 
+    public GalleryController(IRetrofitService retrofitService) {
+        this.retrofitService = retrofitService;
+    }
+
     @FXML
     public void initialize() {
-        gridPane.setMinWidth(NUMBER_OF_COLUMNS * PictureController.PICTURE_SIZE);
-        gridPane.setMinHeight(NUMBER_OF_ROWS * PictureController.PICTURE_SIZE);
+        gridPane.setMinWidth(NUMBER_OF_COLUMNS * Picture.SIZE);
+        gridPane.setMinHeight(NUMBER_OF_ROWS * Picture.SIZE);
         gridPane.setBackground(new Background(new BackgroundFill(Color.AQUAMARINE, new CornerRadii(0), new Insets(0))));
     }
 
@@ -55,14 +65,26 @@ public class GalleryController {
 
         var absolutePath = file.getAbsolutePath();
         var extension = File.getExtension(absolutePath);
-        FileSenderStrategyBuilder.Build(extension).sendFile(absolutePath, new NetworkCallback<Integer>() {
+        FileSenderStrategyBuilder.Build(extension, retrofitService).sendFile(absolutePath, new NetworkCallback<Integer>() {
             @Override
             public void process(Integer result) throws IOException {
-                var loader = new FXMLLoader();
-                loader.setLocation(GalleryController.class.getResource("../view/picture.fxml"));
+
+
+                var loader = new FXMLLoader(
+                    getClass().getResource("../view/picture.fxml"),
+                    null,
+                    new JavaFXBuilderFactory(),
+                    new Callback<Class<?>, Object>() {
+                        @Override
+                        public Object call(Class<?> param) {
+                            var c = new PictureController(retrofitService);
+                            c.setId(result);
+                            return c;
+                        }
+                    }
+                );
+                
                 VBox rootLayout = loader.load();
-                PictureController controller = loader.getController();
-                controller.setId(result);
                 gridPane.add(rootLayout, columnIndex, rowIndex);
 
                 if (columnIndex == NUMBER_OF_COLUMNS - 1) {

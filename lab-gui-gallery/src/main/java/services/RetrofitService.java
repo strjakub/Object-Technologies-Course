@@ -5,8 +5,6 @@ import model.PictureDAO;
 
 public class RetrofitService implements IRetrofitService {
 
-    public static final IRetrofitService Instance = new RetrofitService(RetrofitClient.Instance);
-
     private final IRetrofitClient retrofitClient;
 
     public RetrofitService(IRetrofitClient retrofitClient) {

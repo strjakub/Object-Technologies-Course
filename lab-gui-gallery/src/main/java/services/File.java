@@ -6,8 +6,8 @@ import java.util.stream.Stream;
 
 public class File {
 
-    private static final List<String> photosExtensions = Arrays.asList("png", "jpg", "bmp");
     public static final String ZIP = "zip";
+    private static final List<String> photosExtensions = Arrays.asList("png", "jpg", "bmp");
 
     public static boolean isPhotoOrZip(String extension) {
         return extension.equals(ZIP) || isPhoto(extension);
