@@ -3,7 +3,7 @@ package services;
 public class FileSenderStrategyBuilder {
 
     public static IFileSender Build(String extension) {
-        return extension.equals(FileService.ZIP) 
+        return extension.equals(File.ZIP) 
             ? new ZipFileSender()
             : new PhotoFileSender();
     }
