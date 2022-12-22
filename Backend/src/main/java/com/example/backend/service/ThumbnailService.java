@@ -5,6 +5,7 @@ import com.example.backend.model.Thumbnail;
 import com.example.backend.repositories.ImageRepository;
 import com.example.backend.repositories.ThumbnailRepository;
 import com.example.backend.utils.ThumbnailGenerator;
+import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import lombok.extern.slf4j.Slf4j;
@@ -44,11 +45,9 @@ public class ThumbnailService {
     }
 
     public void generateThumbnail(Image img) {
-        Single<Thumbnail> call = Single.create(subscriber -> {
+        Completable.fromAction(() -> {
             Thumbnail thumbnail = new Thumbnail(generator.convertToThumbnail(img), img.getExtension(), img);
-            Thumbnail res = thumbnailRepository.save(thumbnail);
-            subscriber.onSuccess(res);
-        });
-        call.subscribeOn(Schedulers.computation()).subscribe();
+            thumbnailRepository.save(thumbnail);
+        }).subscribeOn(Schedulers.computation()).subscribe();
     }
 }
