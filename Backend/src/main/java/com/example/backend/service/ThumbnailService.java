@@ -46,7 +46,8 @@ public class ThumbnailService {
 
     public void generateThumbnail(Image img) {
         Completable.fromAction(() -> {
-            Thumbnail thumbnail = new Thumbnail(generator.convertToThumbnail(img), img.getExtension(), img);
+            byte[] small = generator.convertToThumbnail(img);
+            Thumbnail thumbnail = new Thumbnail(small, small, small, img.getExtension(), img.getPath(), img);
             thumbnailRepository.save(thumbnail);
         }).subscribeOn(Schedulers.computation()).subscribe();
     }

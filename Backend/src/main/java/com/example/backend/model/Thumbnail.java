@@ -19,11 +19,22 @@ public class Thumbnail {
     private int id;
 
     @Lob
-    @Column(name = Columns.CONTENT)
-    private byte[] data;
+    @Column(name = Columns.SMALL)
+    private byte[] small;
+
+    @Lob
+    @Column(name = Columns.MEDIUM)
+    private byte[] medium;
+
+    @Lob
+    @Column(name = Columns.LARGE)
+    private byte[] large;
 
     @Column(name = Columns.EXTENSION, nullable = false)
     private String extension;
+
+    @Column(name = Columns.PATH, nullable = false)
+    private String path;
 
     @OneToOne
     @JoinColumn(name = "imageId")
@@ -32,9 +43,12 @@ public class Thumbnail {
 
     public Thumbnail() {}
 
-    public Thumbnail(byte[] data, String extension, Image image) {
-        this.data = data;
+    public Thumbnail(byte[] small, byte[] medium, byte[] large, String extension, String path, Image image) {
+        this.small = small;
+        this.medium = medium;
+        this.large = large;
         this.extension = extension;
+        this.path = path;
         this.image = image;
     }
 
@@ -42,12 +56,24 @@ public class Thumbnail {
         return id;
     }
 
-    public byte[] getData() {
-        return data;
+    public byte[] getSmall() {
+        return small;
+    }
+
+    public byte[] getMedium() {
+        return medium;
+    }
+
+    public byte[] getLarge() {
+        return large;
     }
 
     public String getExtension() {
         return extension;
+    }
+
+    public String getPath() {
+        return path;
     }
 
     public Image getImage() {
@@ -56,13 +82,16 @@ public class Thumbnail {
 
     public static class Columns {
         public static final String ID = "id";
-        public static final String CONTENT = "content";
+        public static final String SMALL = "small";
+        public static final String MEDIUM = "medium";
+        public static final String LARGE = "large";
         public static final String EXTENSION = "extension";
+        public static final String PATH = "path";
     }
 
     @Override
     public String toString() {
-        return "{id: " + id + ", data: " + Arrays.toString(data) + ", extension: " + extension + ", imageId: " + image.getId() + "}";
+        return "{id: " + id + ", small: " + Arrays.toString(small) + ", extension: " + extension + ", imageId: " + image.getId() + "}";
     }
 
 }
