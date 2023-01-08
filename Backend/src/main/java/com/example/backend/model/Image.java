@@ -3,12 +3,14 @@ package com.example.backend.model;
 import com.example.backend.service.ByteArraySerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import org.springframework.boot.jackson.JsonComponent;
 
 import javax.persistence.*;
 import java.util.Arrays;
 
 @Entity
 @Table(name = Image.TABLE_NAME)
+@JsonComponent
 public class Image {
 
     public static final String TABLE_NAME = "image";
@@ -20,7 +22,6 @@ public class Image {
 
     @Lob
     @Column(name = Columns.CONTENT)
-    @JsonSerialize(using = ByteArraySerializer.class)
     private byte[] data;
 
     @Column(name = Columns.EXTENSION, nullable = false)
