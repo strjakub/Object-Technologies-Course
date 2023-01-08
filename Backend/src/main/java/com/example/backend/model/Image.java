@@ -1,8 +1,6 @@
 package com.example.backend.model;
 
-import com.example.backend.service.ByteArraySerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.springframework.boot.jackson.JsonComponent;
 
 import javax.persistence.*;
