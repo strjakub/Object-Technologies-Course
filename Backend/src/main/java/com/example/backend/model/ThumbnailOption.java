@@ -12,6 +12,6 @@ public class ThumbnailOption {
 
     public ThumbnailOption(Thumbnail data, Optional<Image> img) {
         this.data = data;
-        this.state = img.isEmpty().map(r -> );
+        // this.state = img.isEmpty().map(r -> );
     }
 }
