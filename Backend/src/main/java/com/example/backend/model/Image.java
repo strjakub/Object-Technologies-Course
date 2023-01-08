@@ -26,15 +26,19 @@ public class Image {
     @Column(name = Columns.EXTENSION, nullable = false)
     private String extension;
 
+    @Column(name = Columns.PATH, nullable = false)
+    private String path;
+
     @JsonIgnore
     @OneToOne(mappedBy="image")
     private Thumbnail thumbnail;
 
     public Image() {}
 
-    public Image(byte[] data, String extension) {
+    public Image(byte[] data, String extension, String path) {
         this.data = data;
         this.extension = extension;
+        this.path = path;
     }
 
     public int getId() {
@@ -49,6 +53,10 @@ public class Image {
         return extension;
     }
 
+    public String getPath() {
+        return path;
+    }
+
     public Thumbnail getThumbnail() {
         return thumbnail;
     }
@@ -61,11 +69,12 @@ public class Image {
         public static final String ID = "id";
         public static final String CONTENT = "content";
         public static final String EXTENSION = "extension";
+        public static final String PATH = "path";
     }
 
     @Override
     public String toString() {
-        return "{id: " + id + ", data: " + Arrays.toString(data) + ", extension: " + extension + "}";
+        return "{id: " + id + ", data: " + Arrays.toString(data) + ", extension: " + extension + ", path: " + path + "}";
     }
 
 }
