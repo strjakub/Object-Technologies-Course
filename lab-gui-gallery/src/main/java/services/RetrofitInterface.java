@@ -2,6 +2,7 @@ package services;
 
 import model.Picture;
 import model.PictureDAO;
+import model.ThumbnailDAO;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -17,5 +18,5 @@ public interface RetrofitInterface {
     Call<PictureDAO> getImage(@Path("id") Integer id);
 
     @GET("thumbnail/{id}")
-    Call<PictureDAO> getThumbnail(@Path("id") Integer id);
+    Call<ThumbnailDAO> getThumbnail(@Path("id") Integer id);
 }

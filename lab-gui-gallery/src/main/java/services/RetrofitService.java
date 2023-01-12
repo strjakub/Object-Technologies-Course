@@ -2,6 +2,7 @@ package services;
 
 import model.Picture;
 import model.PictureDAO;
+import model.ThumbnailDAO;
 
 public class RetrofitService implements IRetrofitService {
 
@@ -23,7 +24,7 @@ public class RetrofitService implements IRetrofitService {
         getApInterface().getImage(id).enqueue(callback);
     }
 
-    public void getThumbnail(Integer id, NetworkCallback<PictureDAO> callback) {        
+    public void getThumbnail(Integer id, NetworkCallback<ThumbnailDAO> callback) {        
         getApInterface().getThumbnail(id).enqueue(callback);
     }
 }

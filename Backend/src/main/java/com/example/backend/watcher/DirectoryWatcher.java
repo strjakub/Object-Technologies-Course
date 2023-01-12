@@ -67,7 +67,7 @@ public class DirectoryWatcher {
                            Path imagePath = Paths.get(resources + "/" + res.context().toString()).toAbsolutePath();
                            byte[] data = Files.readAllBytes(imagePath);
                            String extension = FilenameUtils.getExtension(res.context().toString());
-                           Image newImage = new Image(data, extension);
+                           Image newImage = new Image(data, extension, "/server");
                            imageService.uploadImage(newImage).subscribeOn(Schedulers.computation()).subscribe();
                            thumbnailService.generateThumbnail(newImage);
                            //todo here we can add some messaging to the
