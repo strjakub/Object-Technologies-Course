@@ -94,7 +94,7 @@ public class GalleryController {
 
 
                 var loader = new FXMLLoader(
-                    getClass().getResource("../view/folder.fxml"),
+                    getClass().getResource("../view/picture.fxml"),
                     null,
                     new JavaFXBuilderFactory(),
                     new Callback<Class<?>, Object>() {
