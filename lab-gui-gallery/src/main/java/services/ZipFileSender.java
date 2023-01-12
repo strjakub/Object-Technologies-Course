@@ -15,14 +15,14 @@ public class ZipFileSender implements IFileSender {
     }
 
     @Override
-    public void sendFile(String fullPath, NetworkCallback<Integer> callback) throws IOException {
+    public void sendFile(String fullPath, String relativePath, NetworkCallback<Integer> callback) throws IOException {
         var zip = new ZipFile(fullPath);
         for (var entry: Collections.list(zip.entries())) {
             var extension =  File.getExtension(entry.getName());
             if (File.isPhoto(extension)) {
                 var stream = zip.getInputStream(entry);
                 var bytes = stream.readAllBytes();
-                var image = new Picture(bytes, extension);
+                var image = new Picture(bytes, extension, relativePath);
                 retrofitService.postImage(image, callback);
             }
         }

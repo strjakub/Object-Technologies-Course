@@ -29,6 +29,7 @@ public class GalleryController {
 
     private int rowIndex = 0;
     private int columnIndex = 0;
+    private String relativePath = "";
 
     private final IRetrofitService retrofitService;
 
@@ -65,7 +66,9 @@ public class GalleryController {
 
         var absolutePath = file.getAbsolutePath();
         var extension = File.getExtension(absolutePath);
-        FileSenderStrategyBuilder.Build(extension, retrofitService).sendFile(absolutePath, new NetworkCallback<Integer>() {
+        FileSenderStrategyBuilder.Build(extension, retrofitService)
+            .sendFile(absolutePath, relativePath, new NetworkCallback<Integer>() {
+
             @Override
             public void process(Integer result) throws IOException {
 
