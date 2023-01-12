@@ -15,11 +15,11 @@ public class PhotoFileSender implements IFileSender {
     }
 
     @Override
-    public void sendFile(String fullPath, NetworkCallback<Integer> callback) throws IOException {
+    public void sendFile(String fullPath, String relativePath, NetworkCallback<Integer> callback) throws IOException {
         var extension = File.getExtension(fullPath);
         var path  = Paths.get(fullPath);
         var bytes = Files.readAllBytes(path);
-        var image = new Picture(bytes, extension);
+        var image = new Picture(bytes, extension, relativePath);
         retrofitService.postImage(image, callback);
     }
 }
