@@ -5,8 +5,10 @@ import java.util.Base64;
 public class PictureDAO {
     private String data;
     private String extension;
+    private String path;
     
     public static Picture convertTo(PictureDAO dto) {
-        return new Picture(Base64.getDecoder().decode(dto.data), dto.extension);
+        var data = Base64.getDecoder().decode(dto.data);
+        return new Picture(data, dto.extension, dto.path);
     }
 }
