@@ -17,7 +17,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.Picture;
 import model.PictureDAO;
-import model.Thumbnail;
 import model.ThumbnailDAO;
 import services.IRetrofitService;
 import services.NetworkCallback;
