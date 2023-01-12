@@ -50,6 +50,26 @@ public class GalleryController {
         gridPane.setBackground(new Background(new BackgroundFill(Color.AQUAMARINE, new CornerRadii(0), new Insets(0))));
     }
 
+
+    @FXML
+    private void createDirectory(ActionEvent event) throws IOException
+    {
+        var loader = new FXMLLoader(
+            getClass().getResource("../view/folder.fxml"),
+            null,
+            new JavaFXBuilderFactory(),
+            new Callback<Class<?>, Object>() {
+                @Override
+                public Object call(Class<?> param) {
+                    return new FolderController(relativePath);
+                }
+            }
+        );
+        
+        VBox rootLayout = loader.load();
+        gridPane.add(rootLayout, columnIndex, rowIndex);
+    }
+
     @FXML
     private void sendData(ActionEvent event) throws IOException {
         event.consume();
@@ -74,7 +94,7 @@ public class GalleryController {
 
 
                 var loader = new FXMLLoader(
-                    getClass().getResource("../view/picture.fxml"),
+                    getClass().getResource("../view/folder.fxml"),
                     null,
                     new JavaFXBuilderFactory(),
                     new Callback<Class<?>, Object>() {
