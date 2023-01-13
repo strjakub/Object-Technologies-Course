@@ -1,0 +1,29 @@
+## 07.12.2022
+- diagram UML
+## 09.12.2022
+- Added classes for services, controllers and thumbnailGenerator (all withouth implementation)
+## 11.12.2022
+- DB with DAO
+## 12.12.2022
+- Entity changes (OneToOne, cascade)
+## 13.12.2022
+- Added rxJava to backend and created reactive api
+## 14.12.2022
+- Added frontend template
+- Added Retrofit configuration
+## 15.12.2022
+- Changed sqlLite dialect to H2Dialect (REASON: errors with sql syntax)
+- DAO changed to JPA Rpository (REASON: found session error that duplicates data when using DAO)
+- Added posibility to send zip
+- Fixed fileChooser from showSaveDialod to showOpenDialog
+- Added ProgressBar indicator
+- Changed coding byte[] to Base64.encodeBase64String
+- Added GridPane with Pictures
+## 16.12.2022
+- Fixed the issue with queing tasks (generating thumbnails was blocking api response)
+- Added HttpStatus.PROCESSING status code for resizing in progress
+- Added possibility to show bigger picture on click
+- Added opening bigger picture in modality WINDOW_MODAL
+- Added ImageDto for incoming responses in frontend
+- Added possibility to send png, jpg, bmp
+- Added fake rezising image simulation as waiting random time from 2 to 10 seconds
