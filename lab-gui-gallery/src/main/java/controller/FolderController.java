@@ -1,16 +1,25 @@
 package controller;
 
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import model.Picture;
 
 public class FolderController {
 
+    private final GalleryController galleryController;
     private final String relativePath;
 
-    public FolderController(String relativePath) {
+    public FolderController(GalleryController galleryController, String relativePath) {
+        this.galleryController = galleryController;
         this.relativePath = relativePath;
     }
 
@@ -18,10 +27,21 @@ public class FolderController {
     private VBox container;
 
     public void initialize() {
+        var pane = new StackPane();
         var img = new Image(getClass().getResource("/folder.png").toString());
         var imageView = new ImageView(img);
         imageView.setFitHeight(Picture.SIZE);
         imageView.setFitWidth(Picture.SIZE);
-        container.getChildren().add(imageView);
+        imageView.setOnMouseClicked(event -> { showDirectory(); });
+        var label = new Label(relativePath);
+        label.setTextFill(Color.color(1, 0, 0));
+        label.setStyle("-fx-font-weight: bold");
+        label.setBackground(new Background(new BackgroundFill(Color.rgb(0, 0, 80, 0.7), new CornerRadii(5.0), new Insets(-5.0))));
+        pane.getChildren().addAll(imageView, label);
+        container.getChildren().add(pane);
+    }
+
+    private void showDirectory() {
+        galleryController.refresh(relativePath);
     }
 }

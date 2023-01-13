@@ -7,11 +7,12 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.JavaFXBuilderFactory;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -29,7 +30,7 @@ public class GalleryController {
 
     private int rowIndex = 0;
     private int columnIndex = 0;
-    private String relativePath = "";
+    private String relativePath = ".";
 
     private final IRetrofitService retrofitService;
 
@@ -38,6 +39,9 @@ public class GalleryController {
 
     @FXML
     private GridPane gridPane;
+
+    @FXML
+    private TextField textField;
 
     public GalleryController(IRetrofitService retrofitService) {
         this.retrofitService = retrofitService;
@@ -54,6 +58,7 @@ public class GalleryController {
     @FXML
     private void createDirectory(ActionEvent event) throws IOException
     {
+        var reference = this;
         var loader = new FXMLLoader(
             getClass().getResource("../view/folder.fxml"),
             null,
@@ -61,13 +66,22 @@ public class GalleryController {
             new Callback<Class<?>, Object>() {
                 @Override
                 public Object call(Class<?> param) {
-                    return new FolderController(relativePath);
+                    var path = relativePath + "/" + textField.getText();
+                    textField.clear();
+                    return new FolderController(reference, path);
                 }
             }
         );
         
-        VBox rootLayout = loader.load();
-        gridPane.add(rootLayout, columnIndex, rowIndex);
+        loadRootLayout(loader);
+    }
+
+    @FXML
+    private void goUp(ActionEvent event) throws IOException
+    {
+        var index = relativePath.lastIndexOf("/");
+        var path = relativePath.substring(0, index);
+        refresh(path);
     }
 
     @FXML
@@ -91,8 +105,6 @@ public class GalleryController {
 
             @Override
             public void process(Integer result) throws IOException {
-
-
                 var loader = new FXMLLoader(
                     getClass().getResource("../view/picture.fxml"),
                     null,
@@ -107,17 +119,29 @@ public class GalleryController {
                     }
                 );
                 
-                VBox rootLayout = loader.load();
-                gridPane.add(rootLayout, columnIndex, rowIndex);
-
-                if (columnIndex == NUMBER_OF_COLUMNS - 1) {
-                    columnIndex = 0;
-                    rowIndex++;
-                }
-                else {
-                    columnIndex++;
-                }
+                loadRootLayout(loader);
             }
         });
+    }
+
+    private <T extends Node> void loadRootLayout(FXMLLoader loader) throws IOException {
+        T rootLayout = loader.load();
+        gridPane.add(rootLayout, columnIndex, rowIndex);
+
+        if (columnIndex == NUMBER_OF_COLUMNS - 1) {
+            columnIndex = 0;
+            rowIndex++;
+        }
+        else {
+            columnIndex++;
+        }
+    }
+
+    public void refresh(String path) {
+        System.out.println(path);
+        rowIndex = 0;
+        columnIndex = 0;
+        relativePath = path;
+        gridPane.getChildren().clear();
     }
 }
