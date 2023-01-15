@@ -4,6 +4,9 @@ import java.io.IOException;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
@@ -32,12 +35,29 @@ public class SteeringController {
 
     @FXML
     private void createDirectory(ActionEvent event) throws IOException {
-        var path = galleryController.getRelativePath() + "/" + textField.getText();
-        textField.clear();
 
-        var controller = new FolderController(galleryController, path);
-        var rootLayout = (VBox)Root.createElement("view/folder.fxml", controller);
-        galleryController.loadRootLayout(rootLayout);
+        var name = textField.getText();
+        var error = "";
+
+        if (name == "") {
+            error = "Folder nie może mieć pustej nazwy";
+        }
+        else if (galleryController.hasDirectory(name)) {
+            error = "Folder o podanej nazwie juz istnieje";
+        }
+
+        if (error != "") {
+            var alert = new Alert(AlertType.CONFIRMATION);
+            alert.setTitle("To jest informacja na pasku");
+            alert.setHeaderText(error);
+            var okButton = new ButtonType("ok");
+            alert.getButtonTypes().setAll(okButton);
+            alert.showAndWait();
+            return;
+        }
+
+        textField.clear();
+        galleryController.createDirectory(name);
     }
 
     @FXML
