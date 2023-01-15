@@ -40,7 +40,7 @@ public class GalleryController {
     private TextField textField;
 
     @FXML
-    private CreateFolderController createFolderController;
+    private SteeringController steeringController;
 
     public GalleryController(IRetrofitService retrofitService) {
         this.retrofitService = retrofitService;
@@ -54,19 +54,19 @@ public class GalleryController {
 
         var reference = this;
         var loader = new FXMLLoader(
-            getClass().getResource("../view/create-folder.fxml"),
+            getClass().getResource("../view/steering.fxml"),
             null,
             new JavaFXBuilderFactory(),
             new Callback<Class<?>, Object>() {
                 @Override
                 public Object call(Class<?> param) {
-                    return new CreateFolderController(retrofitService, reference);
+                    return new SteeringController(retrofitService, reference);
                 }
             }
         );
 
         var rootLayout = (VBox)loader.load();
-        box.getChildren().add(rootLayout);
+        box.getChildren().add(0, rootLayout);
     }
 
     public <T extends Node> void loadRootLayout(FXMLLoader loader) throws IOException {
