@@ -11,12 +11,16 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import model.ImageSizeChangeListener;
+import model.PictureSizes;
 
-public class FolderController {
+public class FolderController implements ImageSizeChangeListener {
 
     private final GalleryController galleryController;
     private final SteeringController steeringController;
     private final String relativePath;
+
+    private ImageView imageView;
 
     public FolderController(GalleryController galleryController, SteeringController steeringController, String relativePath) {
         this.galleryController = galleryController;
@@ -30,7 +34,7 @@ public class FolderController {
     public void initialize() {
         var pane = new StackPane();
         var img = new Image(getClass().getResource("/folder.png").toString());
-        var imageView = new ImageView(img);
+        imageView = new ImageView(img);
         var size = steeringController.getCurrentSize().toInt();
         imageView.setFitHeight(size);
         imageView.setFitWidth(size);
@@ -41,9 +45,17 @@ public class FolderController {
         label.setBackground(new Background(new BackgroundFill(Color.rgb(0, 0, 80, 0.7), new CornerRadii(5.0), new Insets(-5.0))));
         pane.getChildren().addAll(imageView, label);
         container.getChildren().add(pane);
+        steeringController.addListener(this);
     }
 
     private void showDirectory() {
         galleryController.refresh(relativePath);
+    }
+
+    @Override
+    public void changed(PictureSizes size) {
+        var s = steeringController.getCurrentSize().toInt();
+        imageView.setFitHeight(s);
+        imageView.setFitWidth(s);
     }
 }
