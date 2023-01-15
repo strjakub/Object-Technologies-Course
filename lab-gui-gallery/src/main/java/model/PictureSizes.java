@@ -6,17 +6,18 @@ public enum PictureSizes {
     Large;
 
     public static final int SIZE_SMALL = 50;
-    public static final int SIZE_MDEIUM = 100;
+    public static final int SIZE_MEDIUM = 100;
     public static final int SIZE_LARGE = 200;
 
     public static PictureSizes create(String x) {
-        if (x.equalsIgnoreCase("Small")) 
+        
+        if (x.equals("Small")) 
             return Small; 
-        
-        if (x.equalsIgnoreCase("Medium")) 
+
+        if (x.equals("Medium")) 
             return Medium; 
-        
-        if (x.equalsIgnoreCase("Large")) 
+
+        if (x.equals("Large")) 
             return Large;
 
         throw new IllegalArgumentException(x);
@@ -25,7 +26,7 @@ public enum PictureSizes {
     public int toInt() {
         return switch (this) {
             case Small -> SIZE_SMALL;
-            case Medium -> SIZE_MDEIUM;
+            case Medium -> SIZE_MEDIUM;
             case Large -> SIZE_LARGE;
         };
     }

@@ -2,8 +2,6 @@ package model;
 
 public class Picture {
     
-    public static final int SIZE = 100;
-
     private final byte[] data;
     private final String extension;
     private final String path;

@@ -119,19 +119,16 @@ public class SteeringController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         comboBox.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+            
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                
                 var size = PictureSizes.create(newValue);
+                currentSize = size;
                 for (var listener: listeners) {
                     listener.changed(size);
                 }
-                
-                System.out.println(String.format("%s -> %s", oldValue, newValue));
-            }
-            
+            } 
         });
-        
     }
 
     public void addListener(ImageSizeChangeListener listener) {

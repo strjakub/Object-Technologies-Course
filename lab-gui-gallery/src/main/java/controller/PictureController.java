@@ -13,7 +13,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.ImageSizeChangeListener;
-import model.Picture;
 import model.PictureDAO;
 import model.PictureSizes;
 import model.Thumbnail;
@@ -89,6 +88,9 @@ public class PictureController implements ImageSizeChangeListener {
     @Override
     public void changed(PictureSizes size) {
         var image = new Image(new ByteArrayInputStream(thumbnail.getImage(size)));
+        var s = steeringController.getCurrentSize().toInt();
         imageView.setImage(image);
+        imageView.setFitHeight(s);
+        imageView.setFitWidth(s);
     }
 }
