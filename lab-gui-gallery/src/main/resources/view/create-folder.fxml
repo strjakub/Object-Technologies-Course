@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+
+<VBox   
+    xmlns="http://javafx.com/javafx"
+    xmlns:fx="http://javafx.com/fxml"
+    fx:controller="controller.CreateFolderController"
+    fx:id="container">
+        <Button text="Wstaw" onAction="#sendData"/>
+        <Button text="Nowy fol" onAction="#createDirectory"/>
+        <TextField fx:id="textField"></TextField>
+        <Button text="Do gory" onAction="#goUp"/>
+</VBox>

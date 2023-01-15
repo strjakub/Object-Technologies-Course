@@ -2,7 +2,6 @@ package controller;
 
 import java.io.IOException;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.JavaFXBuilderFactory;
@@ -13,15 +12,12 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 import javafx.util.Callback;
 import model.Picture;
-import services.FileSenderStrategyBuilder;
 import services.IRetrofitService;
-import services.File;
-import services.NetworkCallback;
 
 public class GalleryController {
 
@@ -35,7 +31,7 @@ public class GalleryController {
     private final IRetrofitService retrofitService;
 
     @FXML
-    private PictureController imageController;
+    private HBox box;
 
     @FXML
     private GridPane gridPane;
@@ -43,88 +39,37 @@ public class GalleryController {
     @FXML
     private TextField textField;
 
+    @FXML
+    private CreateFolderController createFolderController;
+
     public GalleryController(IRetrofitService retrofitService) {
         this.retrofitService = retrofitService;
     }
 
     @FXML
-    public void initialize() {
+    public void initialize() throws IOException {
         gridPane.setMinWidth(NUMBER_OF_COLUMNS * Picture.SIZE);
         gridPane.setMinHeight(NUMBER_OF_ROWS * Picture.SIZE);
         gridPane.setBackground(new Background(new BackgroundFill(Color.AQUAMARINE, new CornerRadii(0), new Insets(0))));
-    }
 
-
-    @FXML
-    private void createDirectory(ActionEvent event) throws IOException
-    {
         var reference = this;
         var loader = new FXMLLoader(
-            getClass().getResource("../view/folder.fxml"),
+            getClass().getResource("../view/create-folder.fxml"),
             null,
             new JavaFXBuilderFactory(),
             new Callback<Class<?>, Object>() {
                 @Override
                 public Object call(Class<?> param) {
-                    var path = relativePath + "/" + textField.getText();
-                    textField.clear();
-                    return new FolderController(reference, path);
+                    return new CreateFolderController(retrofitService, reference);
                 }
             }
         );
-        
-        loadRootLayout(loader);
+
+        var rootLayout = (VBox)loader.load();
+        box.getChildren().add(rootLayout);
     }
 
-    @FXML
-    private void goUp(ActionEvent event) throws IOException
-    {
-        var index = relativePath.lastIndexOf("/");
-        var path = relativePath.substring(0, index);
-        refresh(path);
-    }
-
-    @FXML
-    private void sendData(ActionEvent event) throws IOException {
-        event.consume();
-
-        var chooser = new FileChooser();
-        var args = File.getExtensionFilter();
-        var filter = new FileChooser.ExtensionFilter("ZIP lub Images", args);
-        chooser.getExtensionFilters().add(filter);
-
-        var file = chooser.showOpenDialog(new Stage());
-        if (file == null) {
-            return;
-        }
-
-        var absolutePath = file.getAbsolutePath();
-        var extension = File.getExtension(absolutePath);
-        FileSenderStrategyBuilder.Build(extension, retrofitService)
-            .sendFile(absolutePath, relativePath, new NetworkCallback<Integer>() {
-
-            @Override
-            public void process(Integer result) throws IOException {
-                var loader = new FXMLLoader(
-                    getClass().getResource("../view/picture.fxml"),
-                    null,
-                    new JavaFXBuilderFactory(),
-                    new Callback<Class<?>, Object>() {
-                        @Override
-                        public Object call(Class<?> param) {
-                            var c = new PictureController(retrofitService);
-                            c.setId(result);
-                            return c;
-                        }
-                    }
-                );
-                
-                loadRootLayout(loader);
-            }
-        });
-    }
-
-    private <T extends Node> void loadRootLayout(FXMLLoader loader) throws IOException {
+    public <T extends Node> void loadRootLayout(FXMLLoader loader) throws IOException {
         T rootLayout = loader.load();
         gridPane.add(rootLayout, columnIndex, rowIndex);
 
@@ -144,4 +89,15 @@ public class GalleryController {
         relativePath = path;
         gridPane.getChildren().clear();
     }
+
+    public void goUp() {
+        var index = relativePath.lastIndexOf("/");
+        var path = relativePath.substring(0, index);
+        refresh(path);
+    }
+
+    public String getRelativePath() {
+        return relativePath;
+    }
+
 }

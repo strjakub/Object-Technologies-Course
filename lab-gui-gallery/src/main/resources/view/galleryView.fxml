@@ -8,13 +8,7 @@
         xmlns:fx="http://javafx.com/fxml"
         minHeight="550.0" minWidth="600.0"
         fx:controller="controller.GalleryController">
-    <HBox>
-        <VBox>
-            <Button text="Wstaw" onAction="#sendData"/>
-            <Button text="Nowy fol" onAction="#createDirectory"/>
-            <TextField fx:id="textField"></TextField>
-            <Button text="Do gory" onAction="#goUp"/>
-        </VBox>
+    <HBox fx:id="box">
         <GridPane fx:id="gridPane"></GridPane>
     </HBox>
 </Pane>
