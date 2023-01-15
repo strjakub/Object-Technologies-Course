@@ -6,7 +6,6 @@ import java.util.HashSet;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
@@ -26,7 +25,7 @@ public class GalleryController {
     private int rowIndex = 0;
     private int columnIndex = 0;
     private String relativePath = ".";
-    private HashSet<String> names = new HashSet<String>();
+    private final HashSet<String> names = new HashSet<String>();
 
     private final IRetrofitService retrofitService;
 
@@ -35,13 +34,7 @@ public class GalleryController {
 
     @FXML
     private GridPane gridPane;
-
-    @FXML
-    private TextField textField;
-
-    @FXML
-    private SteeringController steeringController;
-
+    
     public GalleryController(IRetrofitService retrofitService) {
         this.retrofitService = retrofitService;
     }
