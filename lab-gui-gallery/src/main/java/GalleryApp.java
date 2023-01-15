@@ -14,7 +14,7 @@ public class GalleryApp extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
         var controller = new GalleryController(new RetrofitService(new RetrofitClient()));
-        var rootLayout = (Pane)Root.createElement("view/galleryView.fxml", controller);
+        var rootLayout = Root.<Pane>createElement("view/galleryView.fxml", controller);
 
         configureStage(primaryStage, rootLayout);
         primaryStage.show();
