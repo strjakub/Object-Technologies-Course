@@ -4,17 +4,15 @@ import java.io.IOException;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.JavaFXBuilderFactory;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 import services.File;
 import services.FileSenderStrategyBuilder;
 import services.IRetrofitService;
 import services.NetworkCallback;
+import services.Root;
 
 public class SteeringController {
 
@@ -34,22 +32,12 @@ public class SteeringController {
 
     @FXML
     private void createDirectory(ActionEvent event) throws IOException {
-        
-        var loader = new FXMLLoader(
-            getClass().getResource("../view/folder.fxml"),
-            null,
-            new JavaFXBuilderFactory(),
-            new Callback<Class<?>, Object>() {
-                @Override
-                public Object call(Class<?> param) {
-                    var path = galleryController.getRelativePath() + "/" + textField.getText();
-                    textField.clear();
-                    return new FolderController(galleryController, path);
-                }
-            }
-        );
+        var path = galleryController.getRelativePath() + "/" + textField.getText();
+        textField.clear();
 
-        galleryController.loadRootLayout(loader);
+        var controller = new FolderController(galleryController, path);
+        var rootLayout = (VBox)Root.createElement("view/folder.fxml", controller);
+        galleryController.loadRootLayout(rootLayout);
     }
 
     @FXML
@@ -80,21 +68,10 @@ public class SteeringController {
 
             @Override
             public void process(Integer result) throws IOException {
-                var loader = new FXMLLoader(
-                    getClass().getResource("../view/picture.fxml"),
-                    null,
-                    new JavaFXBuilderFactory(),
-                    new Callback<Class<?>, Object>() {
-                        @Override
-                        public Object call(Class<?> param) {
-                            var c = new PictureController(retrofitService);
-                            c.setId(result);
-                            return c;
-                        }
-                    }
-                );
-                
-                galleryController.loadRootLayout(loader);
+                var controller = new PictureController(retrofitService);
+                controller.setId(result);
+                var rootLayout = (VBox)Root.createElement("view/picture.fxml", controller);
+                galleryController.loadRootLayout(rootLayout);
             }
         });
 
