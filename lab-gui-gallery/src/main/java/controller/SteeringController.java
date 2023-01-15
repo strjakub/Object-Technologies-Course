@@ -16,12 +16,12 @@ import services.FileSenderStrategyBuilder;
 import services.IRetrofitService;
 import services.NetworkCallback;
 
-public class CreateFolderController {
+public class SteeringController {
 
     private final IRetrofitService retrofitService;
     private final GalleryController galleryController;
 
-    public CreateFolderController(IRetrofitService retrofitService, GalleryController galleryController) {
+    public SteeringController(IRetrofitService retrofitService, GalleryController galleryController) {
         this.retrofitService = retrofitService;
         this.galleryController = galleryController;
     }
