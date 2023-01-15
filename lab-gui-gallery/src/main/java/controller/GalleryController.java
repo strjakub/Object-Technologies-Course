@@ -3,8 +3,6 @@ package controller;
 import java.io.IOException;
 
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.JavaFXBuilderFactory;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.TextField;
@@ -15,9 +13,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.util.Callback;
 import model.Picture;
 import services.IRetrofitService;
+import services.Root;
 
 public class GalleryController {
 
@@ -51,26 +49,12 @@ public class GalleryController {
         gridPane.setMinWidth(NUMBER_OF_COLUMNS * Picture.SIZE);
         gridPane.setMinHeight(NUMBER_OF_ROWS * Picture.SIZE);
         gridPane.setBackground(new Background(new BackgroundFill(Color.AQUAMARINE, new CornerRadii(0), new Insets(0))));
-
-        var reference = this;
-        var loader = new FXMLLoader(
-            getClass().getResource("../view/steering.fxml"),
-            null,
-            new JavaFXBuilderFactory(),
-            new Callback<Class<?>, Object>() {
-                @Override
-                public Object call(Class<?> param) {
-                    return new SteeringController(retrofitService, reference);
-                }
-            }
-        );
-
-        var rootLayout = (VBox)loader.load();
+        var controller = new SteeringController(retrofitService, this);
+        var rootLayout = (VBox)Root.createElement("view/steering.fxml", controller);
         box.getChildren().add(0, rootLayout);
     }
 
-    public <T extends Node> void loadRootLayout(FXMLLoader loader) throws IOException {
-        T rootLayout = loader.load();
+    public <T extends Node> void loadRootLayout(T rootLayout) {
         gridPane.add(rootLayout, columnIndex, rowIndex);
 
         if (columnIndex == NUMBER_OF_COLUMNS - 1) {
