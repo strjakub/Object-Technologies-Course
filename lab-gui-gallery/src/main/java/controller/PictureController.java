@@ -12,6 +12,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import model.ImageSizeChangeListener;
 import model.Picture;
 import model.PictureDAO;
 import model.PictureSizes;
@@ -20,18 +21,22 @@ import model.ThumbnailDAO;
 import services.IRetrofitService;
 import services.NetworkCallback;
 
-public class PictureController {
+public class PictureController implements ImageSizeChangeListener {
 
     private final IRetrofitService retrofitService;
+    private final SteeringController steeringController;
+
     private Integer id;
     private ProgressIndicator progress;
     private Thumbnail thumbnail;
+    private ImageView imageView;
 
     @FXML
     private VBox container;
 
-    public PictureController(IRetrofitService retrofitService) {
+    public PictureController(IRetrofitService retrofitService, SteeringController steeringController) {
         this.retrofitService = retrofitService;
+        this.steeringController = steeringController;
     }
 
     public void setId(Integer id) {
@@ -41,10 +46,11 @@ public class PictureController {
             public void process(ThumbnailDAO result) throws IOException {
                 thumbnail = ThumbnailDAO.convertTo(result);
                 var img = new Image(new ByteArrayInputStream(thumbnail.getImage(PictureSizes.Small)));
-                var imageView = new ImageView(img);
+                imageView = new ImageView(img);
                 imageView.setOnMouseClicked(event -> { showPicture(); });
-                imageView.setFitHeight(Picture.SIZE);
-                imageView.setFitWidth(Picture.SIZE);
+                var size = steeringController.getCurrentSize().toInt();
+                imageView.setFitHeight(size);
+                imageView.setFitWidth(size);
                 container.getChildren().remove(progress);
                 container.getChildren().add(imageView);
             }
@@ -53,8 +59,10 @@ public class PictureController {
 
     public void initialize() {
         progress = new ProgressIndicator();
-        progress.setMinSize(Picture.SIZE, Picture.SIZE);
+        var size = steeringController.getCurrentSize().toInt();
+        progress.setMinSize(size, size);
         container.getChildren().add(progress);
+        steeringController.addListener(this);
     }
 
     private void showPicture() {
@@ -76,5 +84,11 @@ public class PictureController {
                 stage.show();
             }
         });
+    }
+
+    @Override
+    public void changed(PictureSizes size) {
+        var image = new Image(new ByteArrayInputStream(thumbnail.getImage(size)));
+        imageView.setImage(image);
     }
 }

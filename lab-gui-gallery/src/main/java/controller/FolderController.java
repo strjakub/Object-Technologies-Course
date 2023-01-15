@@ -11,15 +11,16 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import model.Picture;
 
 public class FolderController {
 
     private final GalleryController galleryController;
+    private final SteeringController steeringController;
     private final String relativePath;
 
-    public FolderController(GalleryController galleryController, String relativePath) {
+    public FolderController(GalleryController galleryController, SteeringController steeringController, String relativePath) {
         this.galleryController = galleryController;
+        this.steeringController = steeringController;
         this.relativePath = relativePath;
     }
 
@@ -30,8 +31,9 @@ public class FolderController {
         var pane = new StackPane();
         var img = new Image(getClass().getResource("/folder.png").toString());
         var imageView = new ImageView(img);
-        imageView.setFitHeight(Picture.SIZE);
-        imageView.setFitWidth(Picture.SIZE);
+        var size = steeringController.getCurrentSize().toInt();
+        imageView.setFitHeight(size);
+        imageView.setFitWidth(size);
         imageView.setOnMouseClicked(event -> { showDirectory(); });
         var label = new Label(relativePath);
         label.setTextFill(Color.color(1, 0, 0));

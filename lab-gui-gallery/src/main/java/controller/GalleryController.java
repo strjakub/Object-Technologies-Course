@@ -27,7 +27,7 @@ public class GalleryController {
     private String relativePath = ".";
     private final HashSet<String> names = new HashSet<String>();
 
-    private final IRetrofitService retrofitService;
+    private final SteeringController steeringController;
 
     @FXML
     private HBox box;
@@ -36,16 +36,16 @@ public class GalleryController {
     private GridPane gridPane;
     
     public GalleryController(IRetrofitService retrofitService) {
-        this.retrofitService = retrofitService;
+        steeringController = new SteeringController(retrofitService, this);
     }
 
     @FXML
     public void initialize() throws IOException {
-        gridPane.setMinWidth(NUMBER_OF_COLUMNS * Picture.SIZE);
-        gridPane.setMinHeight(NUMBER_OF_ROWS * Picture.SIZE);
+        var size = steeringController.getCurrentSize().toInt();
+        gridPane.setMinWidth(NUMBER_OF_COLUMNS * size);
+        gridPane.setMinHeight(NUMBER_OF_ROWS * size);
         gridPane.setBackground(new Background(new BackgroundFill(Color.AQUAMARINE, new CornerRadii(0), new Insets(0))));
-        var controller = new SteeringController(retrofitService, this);
-        var rootLayout = Root.<VBox>createElement("view/steering.fxml", controller);
+        var rootLayout = Root.<VBox>createElement("view/steering.fxml", steeringController);
         box.getChildren().add(0, rootLayout);
     }
 
@@ -90,7 +90,7 @@ public class GalleryController {
     public void createDirectory(String name) {
         names.add(name);
         var path = getRelativePath() + "/" + name;
-        var controller = new FolderController(this, path);
+        var controller = new FolderController(this, steeringController, path);
         var rootLayout = Root.<VBox>createElement("view/folder.fxml", controller);
         loadRootLayout(rootLayout);
     }
