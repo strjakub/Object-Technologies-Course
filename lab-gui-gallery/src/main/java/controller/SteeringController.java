@@ -2,6 +2,8 @@ package controller;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import javafx.beans.value.ChangeListener;
@@ -17,6 +19,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import model.ImageSizeChangeListener;
+import model.PictureSizes;
 import services.File;
 import services.FileSenderStrategyBuilder;
 import services.IRetrofitService;
@@ -27,6 +31,10 @@ public class SteeringController implements Initializable {
 
     private final IRetrofitService retrofitService;
     private final GalleryController galleryController;
+
+    private final List<ImageSizeChangeListener> listeners = new ArrayList<ImageSizeChangeListener>();
+
+    private PictureSizes currentSize = PictureSizes.Small;
 
     public SteeringController(IRetrofitService retrofitService, GalleryController galleryController) {
         this.retrofitService = retrofitService;
@@ -92,12 +100,14 @@ public class SteeringController implements Initializable {
         var extension = File.getExtension(absolutePath);
         var relativePath = galleryController.getRelativePath();
         
+        var reference = this;
+
         FileSenderStrategyBuilder.Build(extension, retrofitService)
             .sendFile(absolutePath, relativePath, new NetworkCallback<Integer>() {
 
             @Override
             public void process(Integer result) throws IOException {
-                var controller = new PictureController(retrofitService);
+                var controller = new PictureController(retrofitService, reference);
                 controller.setId(result);
                 var rootLayout = Root.<VBox>createElement("view/picture.fxml", controller);
                 galleryController.loadRootLayout(rootLayout);
@@ -112,11 +122,23 @@ public class SteeringController implements Initializable {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 
-                System.out.println(String.format("%s -> %s", oldValue, newValue));
+                var size = PictureSizes.create(newValue);
+                for (var listener: listeners) {
+                    listener.changed(size);
+                }
                 
+                System.out.println(String.format("%s -> %s", oldValue, newValue));
             }
             
         });
         
+    }
+
+    public void addListener(ImageSizeChangeListener listener) {
+        listeners.add(listener);
+    }
+
+    public PictureSizes getCurrentSize() {
+        return currentSize;
     }
 }
