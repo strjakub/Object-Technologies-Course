@@ -13,11 +13,12 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import model.Picture;
+import model.ImageSizeChangeListener;
+import model.PictureSizes;
 import services.IRetrofitService;
 import services.Root;
 
-public class GalleryController {
+public class GalleryController implements ImageSizeChangeListener {
 
     private static final int NUMBER_OF_COLUMNS = 5;
     private static final int NUMBER_OF_ROWS = 6;
@@ -37,6 +38,7 @@ public class GalleryController {
     
     public GalleryController(IRetrofitService retrofitService) {
         steeringController = new SteeringController(retrofitService, this);
+        steeringController.addListener(this);
     }
 
     @FXML
@@ -93,5 +95,12 @@ public class GalleryController {
         var controller = new FolderController(this, steeringController, path);
         var rootLayout = Root.<VBox>createElement("view/folder.fxml", controller);
         loadRootLayout(rootLayout);
+    }
+
+    @Override
+    public void changed(PictureSizes size) {
+        var s = size.toInt();
+        gridPane.setMinWidth(NUMBER_OF_COLUMNS * s);
+        gridPane.setMinHeight(NUMBER_OF_ROWS * s);
     }
 }
