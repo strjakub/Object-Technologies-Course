@@ -1,6 +1,7 @@
 package controller;
 
 import java.io.IOException;
+import java.util.HashSet;
 
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -25,6 +26,7 @@ public class GalleryController {
     private int rowIndex = 0;
     private int columnIndex = 0;
     private String relativePath = ".";
+    private HashSet<String> names = new HashSet<String>();
 
     private final IRetrofitService retrofitService;
 
@@ -84,4 +86,15 @@ public class GalleryController {
         return relativePath;
     }
 
+    public boolean hasDirectory(String name) {
+        return names.contains(name);
+    }
+
+    public void createDirectory(String name) {
+        names.add(name);
+        var path = getRelativePath() + "/" + name;
+        var controller = new FolderController(this, path);
+        var rootLayout = (VBox)Root.createElement("view/folder.fxml", controller);
+        loadRootLayout(rootLayout);
+    }
 }
