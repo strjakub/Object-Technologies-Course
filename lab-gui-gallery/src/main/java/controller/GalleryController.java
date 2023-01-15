@@ -52,7 +52,7 @@ public class GalleryController {
         gridPane.setMinHeight(NUMBER_OF_ROWS * Picture.SIZE);
         gridPane.setBackground(new Background(new BackgroundFill(Color.AQUAMARINE, new CornerRadii(0), new Insets(0))));
         var controller = new SteeringController(retrofitService, this);
-        var rootLayout = (VBox)Root.createElement("view/steering.fxml", controller);
+        var rootLayout = Root.<VBox>createElement("view/steering.fxml", controller);
         box.getChildren().add(0, rootLayout);
     }
 
@@ -77,6 +77,10 @@ public class GalleryController {
     }
 
     public void goUp() {
+        if (relativePath.equals(".")) {
+            return;
+        }
+
         var index = relativePath.lastIndexOf("/");
         var path = relativePath.substring(0, index);
         refresh(path);
@@ -94,7 +98,7 @@ public class GalleryController {
         names.add(name);
         var path = getRelativePath() + "/" + name;
         var controller = new FolderController(this, path);
-        var rootLayout = (VBox)Root.createElement("view/folder.fxml", controller);
+        var rootLayout = Root.<VBox>createElement("view/folder.fxml", controller);
         loadRootLayout(rootLayout);
     }
 }

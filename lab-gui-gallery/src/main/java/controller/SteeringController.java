@@ -90,7 +90,7 @@ public class SteeringController {
             public void process(Integer result) throws IOException {
                 var controller = new PictureController(retrofitService);
                 controller.setId(result);
-                var rootLayout = (VBox)Root.createElement("view/picture.fxml", controller);
+                var rootLayout = Root.<VBox>createElement("view/picture.fxml", controller);
                 galleryController.loadRootLayout(rootLayout);
             }
         });
