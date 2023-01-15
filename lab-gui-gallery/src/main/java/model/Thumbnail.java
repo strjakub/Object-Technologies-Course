@@ -18,17 +18,17 @@ public class Thumbnail {
         this.path = path;
     }
 
-    public byte[] getImage(String type) {
-        if (type.equals("Small"))
+    public byte[] getImage(PictureSizes size) {
+        if (size == PictureSizes.Small)
             return small;
         
-        if (type.equals("Medium"))
+        if (size == PictureSizes.Medium)
             return medium;
 
-        if (type.equals("Big"))
+        if (size == PictureSizes.Large)
             return large;
         
-        return null;
+        throw new IllegalArgumentException(size.toString());
     }
 
     public String getExtension() {

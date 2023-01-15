@@ -5,9 +5,6 @@ import java.io.IOException;
 
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -17,6 +14,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.Picture;
 import model.PictureDAO;
+import model.PictureSizes;
+import model.Thumbnail;
 import model.ThumbnailDAO;
 import services.IRetrofitService;
 import services.NetworkCallback;
@@ -26,6 +25,7 @@ public class PictureController {
     private final IRetrofitService retrofitService;
     private Integer id;
     private ProgressIndicator progress;
+    private Thumbnail thumbnail;
 
     @FXML
     private VBox container;
@@ -36,11 +36,11 @@ public class PictureController {
 
     public void setId(Integer id) {
         this.id = id;
-        retrofitService.getImage(id, new NetworkCallback<PictureDAO>() {
+        retrofitService.getThumbnail(id, new NetworkCallback<ThumbnailDAO>() {
             @Override
-            public void process(PictureDAO result) throws IOException {
-                var image = PictureDAO.convertTo(result);
-                var img = new Image(new ByteArrayInputStream(image.getData()));
+            public void process(ThumbnailDAO result) throws IOException {
+                thumbnail = ThumbnailDAO.convertTo(result);
+                var img = new Image(new ByteArrayInputStream(thumbnail.getImage(PictureSizes.Small)));
                 var imageView = new ImageView(img);
                 imageView.setOnMouseClicked(event -> { showPicture(); });
                 imageView.setFitHeight(Picture.SIZE);
@@ -58,23 +58,12 @@ public class PictureController {
     }
 
     private void showPicture() {
-        retrofitService.getThumbnail(id, new NetworkCallback<ThumbnailDAO>() {
+        retrofitService.getImage(id, new NetworkCallback<PictureDAO>() {
             @Override
-            public void process(ThumbnailDAO result) throws IOException {
-                var alert = new Alert(AlertType.CONFIRMATION);
-                alert.setTitle("To jest informacja na pasku");
-                alert.setHeaderText("Tu powinno byc pytanie");
-                
-                var buttonTypeOne = new ButtonType("Small");
-                var buttonTypeTwo = new ButtonType("Medium");
-                var buttonTypeThree = new ButtonType("Big");
-                
-                alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo, buttonTypeThree);
-                
+            public void process(PictureDAO result) throws IOException { 
                 var stage = new Stage();
-                var resultType = alert.showAndWait();
-                var image = ThumbnailDAO.convertTo(result);
-                var bytes = image.getImage(resultType.get().getText());
+                var image = PictureDAO.convertTo(result);
+                var bytes = image.getData();
                 var img = new Image(new ByteArrayInputStream(bytes));
                 var imageView = new ImageView(img);
                 var box = new HBox();

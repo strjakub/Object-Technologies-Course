@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.collections.FXCollections ?>
 
 <VBox   
     xmlns="http://javafx.com/javafx"
@@ -13,4 +15,16 @@
         <Button text="Nowy fol" onAction="#createDirectory"/>
         <TextField fx:id="textField"></TextField>
         <Button text="Do gory" onAction="#goUp"/>
+        <ComboBox fx:id="comboBox" layoutX="15.0" layoutY="33.0" prefWidth="90.0" promptText="choose">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="Small"/>
+                    <String fx:value="Medium"/>
+                    <String fx:value="Large"/>
+                </FXCollections>
+            </items>
+            <value>
+                <String fx:value="Small"/>
+            </value>
+        </ComboBox>
 </VBox>
