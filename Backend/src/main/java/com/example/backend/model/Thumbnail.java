@@ -106,4 +106,7 @@ public class Thumbnail {
         return "{id: " + id + ", small: " + Arrays.toString(small) + ", extension: " + extension + ", imageId: " + image.getId() + "}";
     }
 
+    public boolean isComplete(){
+        return this.small != null && this.medium != null && this.large != null;
+    }
 }

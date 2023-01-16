@@ -41,7 +41,7 @@ public class Controller {
     public Single<ResponseEntity<Thumbnail>> getThumbnail(@PathVariable int id) {
         log.info("GOT REQUEST");
         return thumbnailService.getThumbnail(id).subscribeOn(Schedulers.io())
-                .map(res -> res.isEmpty()
+                .map(res -> res.isEmpty() || !res.get().isComplete()
                         ? new ResponseEntity<>(new Thumbnail(), HttpStatus.PROCESSING)
                         : new ResponseEntity<>(res.get(), HttpStatus.OK))
                 .onErrorReturnItem(new ResponseEntity<>(null, HttpStatus.NOT_FOUND));

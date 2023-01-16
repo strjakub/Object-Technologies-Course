@@ -19,6 +19,13 @@ public class ThumbnailGenerator {
     public byte[] convertToThumbnail(Image image, Size size) throws IOException {
         log.info(String.format("...Converting photo... : size = %s", image.getData().length));
         var result = resize(image, size);
+
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         log.info(String.format("...Converted photo... : id = %s, size = %s", image.getId(), image.getData().length));
         return result;
     }
