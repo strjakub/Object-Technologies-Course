@@ -21,7 +21,6 @@ import java.util.Optional;
 public class ThumbnailService {
 
     private final ThumbnailRepository thumbnailRepository;
-
     private final ImageRepository imageRepository;
     private final ThumbnailGenerator generator;
 
@@ -47,16 +46,29 @@ public class ThumbnailService {
     }
 
     public void generateThumbnail(Image img) {
+        generateThumbnail(img, true, true, true);
+    }
+
+    public void generateThumbnail(Image img, boolean smallNeeded, boolean mediumNeeded, boolean largeNeeded) {
         Completable.fromAction(() -> {
-            byte[] small = generator.convertToThumbnail(img, Size.SMALL);
-            Thumbnail thumbnail = new Thumbnail(small, null, null, img.getExtension(), img.getPath(), img);
-            thumbnailRepository.save(thumbnail);
-            byte[] medium = generator.convertToThumbnail(img, Size.MEDIUM);
-            thumbnail.setMedium(medium);
-            thumbnailRepository.save(thumbnail);
-            byte[] large = generator.convertToThumbnail(img, Size.LARGE);
-            thumbnail.setLarge(large);
-            thumbnailRepository.save(thumbnail);
+            Thumbnail thumbnail;
+            if(smallNeeded) {
+                byte[] small = generator.convertToThumbnail(img, Size.SMALL);
+                thumbnail = new Thumbnail(small, null, null, img.getExtension(), img.getPath(), img);
+                thumbnailRepository.save(thumbnail);
+            } else {
+                thumbnail = thumbnailRepository.findByImage_Id(img).get();
+            }
+            if(mediumNeeded) {
+                byte[] medium = generator.convertToThumbnail(img, Size.MEDIUM);
+                thumbnail.setMedium(medium);
+                thumbnailRepository.save(thumbnail);
+            }
+            if(largeNeeded) {
+                byte[] large = generator.convertToThumbnail(img, Size.LARGE);
+                thumbnail.setLarge(large);
+                thumbnailRepository.save(thumbnail);
+            }
         }).subscribeOn(Schedulers.computation()).subscribe();
     }
 }
