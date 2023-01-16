@@ -48,14 +48,15 @@ public class ThumbnailService {
 
     public void generateThumbnail(Image img) {
         Completable.fromAction(() -> {
-            Thumbnail thumbnail = new Thumbnail(null, null, null, img.getExtension(), img.getPath(), img);
-            thumbnailRepository.save(thumbnail);
             byte[] small = generator.convertToThumbnail(img, Size.SMALL);
-            thumbnail.setSmall(small);
+            Thumbnail thumbnail = new Thumbnail(small, null, null, img.getExtension(), img.getPath(), img);
+            thumbnailRepository.save(thumbnail);
             byte[] medium = generator.convertToThumbnail(img, Size.MEDIUM);
             thumbnail.setMedium(medium);
+            thumbnailRepository.save(thumbnail);
             byte[] large = generator.convertToThumbnail(img, Size.LARGE);
-            thumbnail.setSmall(large);
+            thumbnail.setLarge(large);
+            thumbnailRepository.save(thumbnail);
         }).subscribeOn(Schedulers.computation()).subscribe();
     }
 }
