@@ -80,6 +80,18 @@ public class Thumbnail {
         return image;
     }
 
+    public void setSmall(byte[] small) {
+        this.small = small;
+    }
+
+    public void setMedium(byte[] medium) {
+        this.medium = medium;
+    }
+
+    public void setLarge(byte[] large) {
+        this.large = large;
+    }
+
     public static class Columns {
         public static final String ID = "id";
         public static final String SMALL = "small";

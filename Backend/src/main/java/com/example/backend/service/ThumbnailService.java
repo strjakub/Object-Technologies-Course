@@ -4,6 +4,7 @@ import com.example.backend.model.Image;
 import com.example.backend.model.Thumbnail;
 import com.example.backend.repositories.ImageRepository;
 import com.example.backend.repositories.ThumbnailRepository;
+import com.example.backend.utils.Size;
 import com.example.backend.utils.ThumbnailGenerator;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Single;
@@ -12,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.io.IOException;
 import java.util.Optional;
 
 @Slf4j
@@ -46,9 +48,14 @@ public class ThumbnailService {
 
     public void generateThumbnail(Image img) {
         Completable.fromAction(() -> {
-            byte[] small = generator.convertToThumbnail(img);
-            Thumbnail thumbnail = new Thumbnail(small, small, small, img.getExtension(), img.getPath(), img);
+            Thumbnail thumbnail = new Thumbnail(null, null, null, img.getExtension(), img.getPath(), img);
             thumbnailRepository.save(thumbnail);
+            byte[] small = generator.convertToThumbnail(img, Size.SMALL);
+            thumbnail.setSmall(small);
+            byte[] medium = generator.convertToThumbnail(img, Size.MEDIUM);
+            thumbnail.setMedium(medium);
+            byte[] large = generator.convertToThumbnail(img, Size.LARGE);
+            thumbnail.setSmall(large);
         }).subscribeOn(Schedulers.computation()).subscribe();
     }
 }
