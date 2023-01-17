@@ -6,8 +6,6 @@ import model.ThumbnailDAO;
 
 public class RetrofitService implements IRetrofitService {
 
-    private static final int INTERNAL_SERVER_ERROR = 500;
-
     private final IRetrofitClient retrofitClient;
 
     public RetrofitService(IRetrofitClient retrofitClient) {
@@ -22,7 +20,7 @@ public class RetrofitService implements IRetrofitService {
 
         var retryPolicy = RetryPolicyBuilder
             .<Integer>HandleFailure(true)
-            .OrResult(INTERNAL_SERVER_ERROR)
+            .OrResult(HttpStatusCode.InternalServerError)
             .WaitAndRetry(Backoff.DecorrelatedJitter(1000, 6))
             .Build();
 
@@ -33,7 +31,7 @@ public class RetrofitService implements IRetrofitService {
 
         var retryPolicy = RetryPolicyBuilder
             .<PictureDAO>HandleFailure(true)
-            .OrResult(INTERNAL_SERVER_ERROR)
+            .OrResult(HttpStatusCode.InternalServerError)
             .RepreatProcessing(true)
             .Build();
         
@@ -44,7 +42,7 @@ public class RetrofitService implements IRetrofitService {
         
         var retryPolicy = RetryPolicyBuilder
             .<ThumbnailDAO>HandleFailure(true)
-            .OrResult(INTERNAL_SERVER_ERROR)
+            .OrResult(HttpStatusCode.InternalServerError)
             .RepreatProcessing(true)
             .Build();
     

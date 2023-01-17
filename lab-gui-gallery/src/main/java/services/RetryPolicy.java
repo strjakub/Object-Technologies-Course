@@ -22,13 +22,15 @@ public class RetryPolicy<T> implements IRetryPolicy<T>, Callback<T> {
 
     @Override
     public void onResponse(Call<T> call, Response<T> response) {
-        var code = response.code();
-        if (code == 200) {
+        var code = HttpStatusCode.getCode(response.code());
+
+
+        if (code == HttpStatusCode.Success) {
             callback.onResponse(call, response);
             return;
         }
 
-        if (code == 102 && policyBuilder.shouldRepreatProcessing()) {
+        if (code == HttpStatusCode.Processing && policyBuilder.shouldRepreatProcessing()) {
         
             try {
                 Thread.sleep(1000);
@@ -54,7 +56,6 @@ public class RetryPolicy<T> implements IRetryPolicy<T>, Callback<T> {
 
     @Override
     public void onFailure(Call<T> call, Throwable t) {
-        System.out.println("onFailure");
         if (!policyBuilder.shouldHandleFailure()) {
             call.cancel();
             return;
