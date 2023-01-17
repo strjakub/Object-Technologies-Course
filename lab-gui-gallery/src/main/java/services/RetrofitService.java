@@ -1,5 +1,9 @@
 package services;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.Collection;
+
 import model.Picture;
 import model.PictureDAO;
 import model.ThumbnailDAO;
@@ -23,17 +27,37 @@ public class RetrofitService implements IRetrofitService {
     private RetrofitInterface getApInterface() {
         return retrofitClient.getClient().create(RetrofitInterface.class);
     }
-
+    
+    @Override
     public void postImage(Picture image, NetworkCallback<Integer> callback) {
         retryPolicy.execute(getApInterface().postImage(image), callback);
     }
 
+    @Override
     public void getImage(Integer id, NetworkCallback<PictureDAO> callback) {        
         retryPolicy.execute(getApInterface().getImage(id), callback);
     }
 
+    @Override
     public void getThumbnail(Integer id, NetworkCallback<ThumbnailDAO> callback) {       
         retryPolicy.execute(getApInterface().getThumbnail(id), callback);
+    }
+
+    @Override
+    public void getThumbnails(String path, NetworkCallback<Collection<ThumbnailDAO>> callback) {
+        
+        try {
+            path = URLEncoder.encode(path, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new IllegalArgumentException(e);
+        }
+
+        retryPolicy.execute(getApInterface().getThumbnails(path), callback);
+    }
+
+    @Override
+    public void cancelAll() {
+        retrofitClient.cancelAll();
     }
 }
 

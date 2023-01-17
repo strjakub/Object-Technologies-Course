@@ -1,6 +1,7 @@
 package controller;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.HashSet;
 
 import javafx.fxml.FXML;
@@ -15,7 +16,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import model.ImageSizeChangeListener;
 import model.PictureSizes;
+import model.ThumbnailDAO;
 import services.IRetrofitService;
+import services.NetworkCallback;
 import services.Root;
 
 public class GalleryController implements ImageSizeChangeListener {
@@ -29,6 +32,7 @@ public class GalleryController implements ImageSizeChangeListener {
     private final HashSet<String> names = new HashSet<String>();
 
     private final SteeringController steeringController;
+    private final IRetrofitService retrofitService;
 
     @FXML
     private HBox box;
@@ -37,6 +41,7 @@ public class GalleryController implements ImageSizeChangeListener {
     private GridPane gridPane;
     
     public GalleryController(IRetrofitService retrofitService) {
+        this.retrofitService = retrofitService;
         steeringController = new SteeringController(retrofitService, this);
         steeringController.addListener(this);
     }
@@ -49,6 +54,7 @@ public class GalleryController implements ImageSizeChangeListener {
         gridPane.setBackground(new Background(new BackgroundFill(Color.AQUAMARINE, new CornerRadii(0), new Insets(0))));
         var rootLayout = Root.<VBox>createElement("view/steering.fxml", steeringController);
         box.getChildren().add(0, rootLayout);
+        refresh(relativePath);
     }
 
     public <T extends Node> void loadRootLayout(T rootLayout) {
@@ -69,6 +75,20 @@ public class GalleryController implements ImageSizeChangeListener {
         columnIndex = 0;
         relativePath = path;
         gridPane.getChildren().clear();
+        names.clear();
+        retrofitService.cancelAll();
+        retrofitService.getThumbnails(path, new NetworkCallback<Collection<ThumbnailDAO>>() {
+            @Override
+            public void process(Collection<ThumbnailDAO> result) throws IOException {
+                for (var dao: result) {
+                    var thumbnail = ThumbnailDAO.convertTo(dao);
+                    var controller = new PictureController(retrofitService, steeringController);
+                    controller.setThumbnail(thumbnail);
+                    var rootLayout = Root.<VBox>createElement("view/picture.fxml", controller);
+                    loadRootLayout(rootLayout);
+                }
+            } 
+        });
     }
 
     public void goUp() {
