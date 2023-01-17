@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Optional;
 
 @Slf4j
@@ -42,6 +43,13 @@ public class ThumbnailService {
                 return;
             }
             subscriber.onSuccess(Optional.of(res.get()));
+        });
+    }
+
+    public Single<Collection<Thumbnail>> getPathThumbnails(String path){
+        return Single.create(subscriber -> {
+            Collection<Thumbnail> thumbnails = thumbnailRepository.findAllByPath(path);
+            subscriber.onSuccess(thumbnails);
         });
     }
 
