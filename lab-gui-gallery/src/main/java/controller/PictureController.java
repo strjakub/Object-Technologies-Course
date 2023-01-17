@@ -47,7 +47,7 @@ public class PictureController implements ImageSizeChangeListener {
                 var img = new Image(new ByteArrayInputStream(thumbnail.getImage(PictureSizes.Small)));
                 imageView = new ImageView(img);
                 imageView.setOnMouseClicked(event -> { showPicture(); });
-                var size = steeringController.getCurrentSize().toInt();
+                var size = steeringController.getCurrentIntSize();
                 imageView.setFitHeight(size);
                 imageView.setFitWidth(size);
                 container.getChildren().remove(progress);
@@ -58,7 +58,7 @@ public class PictureController implements ImageSizeChangeListener {
 
     public void initialize() {
         progress = new ProgressIndicator();
-        var size = steeringController.getCurrentSize().toInt();
+        var size = steeringController.getCurrentIntSize();
         progress.setMinSize(size, size);
         container.getChildren().add(progress);
         steeringController.addListener(this);
@@ -88,7 +88,7 @@ public class PictureController implements ImageSizeChangeListener {
     @Override
     public void changed(PictureSizes size) {
         var image = new Image(new ByteArrayInputStream(thumbnail.getImage(size)));
-        var s = steeringController.getCurrentSize().toInt();
+        var s = steeringController.getCurrentIntSize();
         imageView.setImage(image);
         imageView.setFitHeight(s);
         imageView.setFitWidth(s);

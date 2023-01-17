@@ -43,7 +43,7 @@ public class GalleryController implements ImageSizeChangeListener {
 
     @FXML
     public void initialize() throws IOException {
-        var size = steeringController.getCurrentSize().toInt();
+        var size = steeringController.getCurrentIntSize();
         gridPane.setMinWidth(NUMBER_OF_COLUMNS * size);
         gridPane.setMinHeight(NUMBER_OF_ROWS * size);
         gridPane.setBackground(new Background(new BackgroundFill(Color.AQUAMARINE, new CornerRadii(0), new Insets(0))));
