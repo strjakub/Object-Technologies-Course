@@ -87,6 +87,12 @@ public class PictureController implements ImageSizeChangeListener {
 
     @Override
     public void changed(PictureSizes size) {
+
+        if (thumbnail == null) {
+            progress.setMinSize(size.toInt(), size.toInt());
+            return;
+        }
+
         var image = new Image(new ByteArrayInputStream(thumbnail.getImage(size)));
         var s = steeringController.getCurrentIntSize();
         imageView.setImage(image);
