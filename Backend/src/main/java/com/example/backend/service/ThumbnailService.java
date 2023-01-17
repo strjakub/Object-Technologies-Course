@@ -4,6 +4,7 @@ import com.example.backend.model.Image;
 import com.example.backend.model.Thumbnail;
 import com.example.backend.repositories.ImageRepository;
 import com.example.backend.repositories.ThumbnailRepository;
+import com.example.backend.utils.Size;
 import com.example.backend.utils.ThumbnailGenerator;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Single;
@@ -12,6 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.io.IOException;
+import java.util.Collection;
 import java.util.Optional;
 
 @Slf4j
@@ -19,7 +22,6 @@ import java.util.Optional;
 public class ThumbnailService {
 
     private final ThumbnailRepository thumbnailRepository;
-
     private final ImageRepository imageRepository;
     private final ThumbnailGenerator generator;
 
@@ -44,11 +46,37 @@ public class ThumbnailService {
         });
     }
 
+    public Single<Collection<Thumbnail>> getPathThumbnails(String path){
+        return Single.create(subscriber -> {
+            Collection<Thumbnail> thumbnails = thumbnailRepository.findAllByPath(path);
+            subscriber.onSuccess(thumbnails);
+        });
+    }
+
     public void generateThumbnail(Image img) {
+        generateThumbnail(img, true, true, true);
+    }
+
+    public void generateThumbnail(Image img, boolean smallNeeded, boolean mediumNeeded, boolean largeNeeded) {
         Completable.fromAction(() -> {
-            byte[] small = generator.convertToThumbnail(img);
-            Thumbnail thumbnail = new Thumbnail(small, small, small, img.getExtension(), img.getPath(), img);
-            thumbnailRepository.save(thumbnail);
+            Thumbnail thumbnail;
+            if(smallNeeded) {
+                byte[] small = generator.convertToThumbnail(img, Size.SMALL);
+                thumbnail = new Thumbnail(small, null, null, img.getExtension(), img.getPath(), img);
+                thumbnailRepository.save(thumbnail);
+            } else {
+                thumbnail = thumbnailRepository.findByImage_Id(img).get();
+            }
+            if(mediumNeeded) {
+                byte[] medium = generator.convertToThumbnail(img, Size.MEDIUM);
+                thumbnail.setMedium(medium);
+                thumbnailRepository.save(thumbnail);
+            }
+            if(largeNeeded) {
+                byte[] large = generator.convertToThumbnail(img, Size.LARGE);
+                thumbnail.setLarge(large);
+                thumbnailRepository.save(thumbnail);
+            }
         }).subscribeOn(Schedulers.computation()).subscribe();
     }
 }

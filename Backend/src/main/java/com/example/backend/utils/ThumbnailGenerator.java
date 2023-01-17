@@ -16,20 +16,24 @@ import java.io.InputStream;
 @Slf4j
 public class ThumbnailGenerator {
 
-    private static final int WIDTH = 300;
-    private static final int HEIGHT = 300;
-
-    public byte[] convertToThumbnail(Image image) throws IOException {
+    public byte[] convertToThumbnail(Image image, Size size) throws IOException {
         log.info(String.format("...Converting photo... : size = %s", image.getData().length));
-        var result = resize(image);
+        var result = resize(image, size);
+
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         log.info(String.format("...Converted photo... : id = %s, size = %s", image.getId(), image.getData().length));
         return result;
     }
 
-    private byte[] resize(Image image) throws IOException {
+    private byte[] resize(Image image, Size size) throws IOException {
         InputStream inputStream = new ByteArrayInputStream(image.getData());
         BufferedImage inputImage = ImageIO.read(inputStream);
-        BufferedImage outImage = Scalr.resize(inputImage, WIDTH, HEIGHT);
+        BufferedImage outImage = Scalr.resize(inputImage, size.getWidth(), size.getHeight());
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         ImageIO.write(outImage, image.getExtension(), outputStream);
         return outputStream.toByteArray();
