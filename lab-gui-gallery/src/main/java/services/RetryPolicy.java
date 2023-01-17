@@ -2,7 +2,7 @@ package services;
 
 import retrofit2.Call;
 
-public class RetryPolicy implements IRetryPolicy {
+public class RetryPolicy {
 
     private final RetryPolicyBuilder policyBuilder;
 
