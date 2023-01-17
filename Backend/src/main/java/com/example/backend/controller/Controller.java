@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.Collection;
 
 @Slf4j
 @RestController
@@ -35,6 +36,13 @@ public class Controller {
         return imageService.getImage(id).subscribeOn(Schedulers.io())
                 .map(r -> new ResponseEntity<>(r, HttpStatus.OK))
                 .defaultIfEmpty(new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
+    }
+
+    @GetMapping(path = "/path/{path}")
+    public Single<ResponseEntity<Collection<Thumbnail>>> getImage(@PathVariable String path) {
+        return thumbnailService.getPathThumbnails(path).subscribeOn(Schedulers.io())
+                .map(r -> new ResponseEntity<>(r, HttpStatus.OK))
+                .onErrorReturnItem(new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR));
     }
 
     @GetMapping(path = "thumbnail/{id}")
