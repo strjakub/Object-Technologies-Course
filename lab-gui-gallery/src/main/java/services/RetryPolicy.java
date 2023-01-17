@@ -11,6 +11,6 @@ public class RetryPolicy {
     }
 
     public <T> void execute(Call<T> call, NetworkCallback<T> callback) {
-        new RetryCallback<T>(policyBuilder, callback).execute(call);
+        new RetryCallback<T>(policyBuilder.clone(), callback).execute(call);
     }
 }

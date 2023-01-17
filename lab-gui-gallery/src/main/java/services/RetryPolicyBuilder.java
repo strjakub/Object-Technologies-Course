@@ -54,4 +54,16 @@ public class RetryPolicyBuilder {
         return new RetryPolicy(this);
     }
 
+    public RetryPolicyBuilder clone() {
+        var builder = new RetryPolicyBuilder(handleFailure)
+            .waitAndRetry(tries)
+            .repreatProcessing(repreatProcessing);
+
+        for (var code : httpStatusCodes) {
+            builder.orResult(code);
+        }
+
+        return builder;
+    }
+
 }

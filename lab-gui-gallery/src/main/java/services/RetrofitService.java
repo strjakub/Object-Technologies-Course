@@ -8,6 +8,14 @@ public class RetrofitService implements IRetrofitService {
 
     private final IRetrofitClient retrofitClient;
 
+    private final RetryPolicy retryPolicy = RetryPolicyBuilder
+        .handleFailure(true)
+        .orResult(HttpStatusCode.InternalServerError)
+        .orResult(HttpStatusCode.RequestTimeout)
+        .waitAndRetry(Backoff.DecorrelatedJitter(1000, 6))
+        .repreatProcessing(true)
+        .build();
+
     public RetrofitService(IRetrofitClient retrofitClient) {
         this.retrofitClient = retrofitClient;
     }
@@ -17,34 +25,14 @@ public class RetrofitService implements IRetrofitService {
     }
 
     public void postImage(Picture image, NetworkCallback<Integer> callback) {
-
-        var retryPolicy = RetryPolicyBuilder
-            .handleFailure(true)
-            .orResult(HttpStatusCode.InternalServerError)
-            .waitAndRetry(Backoff.DecorrelatedJitter(1000, 6))
-            .build();
-
         retryPolicy.execute(getApInterface().postImage(image), callback);
     }
 
     public void getImage(Integer id, NetworkCallback<PictureDAO> callback) {        
-
-        var retryPolicy = RetryPolicyBuilder
-            .handleFailure(true)
-            .orResult(HttpStatusCode.InternalServerError)
-            .repreatProcessing(true)
-            .build();
-        
         retryPolicy.execute(getApInterface().getImage(id), callback);
     }
 
     public void getThumbnail(Integer id, NetworkCallback<ThumbnailDAO> callback) {       
-        
-        var retryPolicy = RetryPolicyBuilder
-            .handleFailure(true)
-            .orResult(HttpStatusCode.InternalServerError)
-            .build();
-    
         retryPolicy.execute(getApInterface().getThumbnail(id), callback);
     }
 }
