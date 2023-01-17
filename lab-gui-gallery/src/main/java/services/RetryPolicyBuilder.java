@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class RetryPolicyBuilder<T> {
+public class RetryPolicyBuilder {
     
     private final boolean handleFailure;
     private final List<HttpStatusCode> httpStatusCodes = new ArrayList<HttpStatusCode>();
@@ -15,21 +15,21 @@ public class RetryPolicyBuilder<T> {
         this.handleFailure = handleFailure;
     }
 
-    public static <T> RetryPolicyBuilder<T> HandleFailure(boolean handleFailure) {
-        return new RetryPolicyBuilder<T>(handleFailure);
+    public static RetryPolicyBuilder handleFailure(boolean handleFailure) {
+        return new RetryPolicyBuilder(handleFailure);
     }
 
-    public RetryPolicyBuilder<T> OrResult(HttpStatusCode statusCode) {
+    public RetryPolicyBuilder orResult(HttpStatusCode statusCode) {
         httpStatusCodes.add(statusCode);
         return this;
     }
 
-    public RetryPolicyBuilder<T> WaitAndRetry(Iterator<Integer> tries) {
+    public RetryPolicyBuilder waitAndRetry(Iterator<Integer> tries) {
         this.tries = tries;
         return this;
     }
 
-    public RetryPolicyBuilder<T> RepreatProcessing(boolean repreat) {
+    public RetryPolicyBuilder repreatProcessing(boolean repreat) {
         this.repreatProcessing = repreat;
         return this;
     }
@@ -50,8 +50,8 @@ public class RetryPolicyBuilder<T> {
         return httpStatusCodes.contains(httpStatusCode);
     }
 
-    public RetryPolicy<T> Build() {
-        return new RetryPolicy<T>(this);
+    public RetryPolicy build() {
+        return new RetryPolicy(this);
     }
 
 }
