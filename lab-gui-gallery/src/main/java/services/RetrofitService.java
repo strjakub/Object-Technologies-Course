@@ -43,7 +43,6 @@ public class RetrofitService implements IRetrofitService {
         var retryPolicy = RetryPolicyBuilder
             .handleFailure(true)
             .orResult(HttpStatusCode.InternalServerError)
-            .repreatProcessing(true)
             .build();
     
         retryPolicy.execute(getApInterface().getThumbnail(id), callback);
