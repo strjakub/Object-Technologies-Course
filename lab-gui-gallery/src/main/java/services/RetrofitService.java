@@ -1,5 +1,9 @@
 package services;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.Collection;
+
 import model.Picture;
 import model.PictureDAO;
 import model.ThumbnailDAO;
@@ -8,6 +12,14 @@ public class RetrofitService implements IRetrofitService {
 
     private final IRetrofitClient retrofitClient;
 
+    private final RetryPolicy retryPolicy = RetryPolicyBuilder
+        .handleFailure(true)
+        .orResult(HttpStatusCode.InternalServerError)
+        .orResult(HttpStatusCode.RequestTimeout)
+        .waitAndRetry(Backoff.DecorrelatedJitter(1000, 6))
+        .repreatProcessing(true)
+        .build();
+
     public RetrofitService(IRetrofitClient retrofitClient) {
         this.retrofitClient = retrofitClient;
     }
@@ -15,17 +27,37 @@ public class RetrofitService implements IRetrofitService {
     private RetrofitInterface getApInterface() {
         return retrofitClient.getClient().create(RetrofitInterface.class);
     }
-
-    public void postImage(Picture image, NetworkCallback<Integer> callback) {        
-        getApInterface().postImage(image).enqueue(callback);
+    
+    @Override
+    public void postImage(Picture image, NetworkCallback<Integer> callback) {
+        retryPolicy.execute(getApInterface().postImage(image), callback);
     }
 
+    @Override
     public void getImage(Integer id, NetworkCallback<PictureDAO> callback) {        
-        getApInterface().getImage(id).enqueue(callback);
+        retryPolicy.execute(getApInterface().getImage(id), callback);
     }
 
-    public void getThumbnail(Integer id, NetworkCallback<ThumbnailDAO> callback) {        
-        getApInterface().getThumbnail(id).enqueue(callback);
+    @Override
+    public void getThumbnail(Integer id, NetworkCallback<ThumbnailDAO> callback) {       
+        retryPolicy.execute(getApInterface().getThumbnail(id), callback);
+    }
+
+    @Override
+    public void getThumbnails(String path, NetworkCallback<Collection<ThumbnailDAO>> callback) {
+        
+        try {
+            path = URLEncoder.encode(path, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new IllegalArgumentException(e);
+        }
+
+        retryPolicy.execute(getApInterface().getThumbnails(path), callback);
+    }
+
+    @Override
+    public void cancelAll() {
+        retrofitClient.cancelAll();
     }
 }
 

@@ -8,11 +8,13 @@ import com.example.backend.watcher.DirectoryWatcher;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.Collection;
 
 @Slf4j
 @RestController
@@ -37,11 +39,18 @@ public class Controller {
                 .defaultIfEmpty(new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
     }
 
+    @GetMapping(path = "/path")
+    public Single<ResponseEntity<Collection<Thumbnail>>> getImage(@RequestParam String path) {
+        return thumbnailService.getPathThumbnails(path).subscribeOn(Schedulers.io())
+                .map(r -> new ResponseEntity<>(r, HttpStatus.OK))
+                .onErrorReturnItem(new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR));
+    }
+
     @GetMapping(path = "thumbnail/{id}")
     public Single<ResponseEntity<Thumbnail>> getThumbnail(@PathVariable int id) {
         log.info("GOT REQUEST");
         return thumbnailService.getThumbnail(id).subscribeOn(Schedulers.io())
-                .map(res -> res.isEmpty()
+                .map(res -> res.isEmpty() || !res.get().isComplete()
                         ? new ResponseEntity<>(new Thumbnail(), HttpStatus.PROCESSING)
                         : new ResponseEntity<>(res.get(), HttpStatus.OK))
                 .onErrorReturnItem(new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
