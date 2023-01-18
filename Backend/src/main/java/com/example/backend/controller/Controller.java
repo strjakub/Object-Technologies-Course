@@ -39,8 +39,8 @@ public class Controller {
                 .defaultIfEmpty(new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
     }
 
-    @GetMapping(path = "/path/{path}")
-    public Single<ResponseEntity<DirectoryContents>> getImage(@PathVariable String path) {
+    @GetMapping(path = "/path")
+    public Single<ResponseEntity<DirectoryContents>> getImage(@RequestParam String path) {
         return thumbnailService.getPathContents(path).subscribeOn(Schedulers.io())
                 .map(r -> new ResponseEntity<>(r, HttpStatus.OK))
                 .onErrorReturnItem(new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR));
