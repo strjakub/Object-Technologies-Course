@@ -1,8 +1,6 @@
 package model;
 
 public class Thumbnail {
-    
-    public static final int SIZE = 100;
 
     private final byte[] small;
     private final byte[] medium;

@@ -35,7 +35,7 @@ public class FolderController implements ImageSizeChangeListener {
         var pane = new StackPane();
         var img = new Image(getClass().getResource("/folder.png").toString());
         imageView = new ImageView(img);
-        var size = steeringController.getCurrentSize().toInt();
+        var size = steeringController.getCurrentIntSize();
         imageView.setFitHeight(size);
         imageView.setFitWidth(size);
         imageView.setOnMouseClicked(event -> { showDirectory(); });
@@ -54,7 +54,7 @@ public class FolderController implements ImageSizeChangeListener {
 
     @Override
     public void changed(PictureSizes size) {
-        var s = steeringController.getCurrentSize().toInt();
+        var s = steeringController.getCurrentIntSize();
         imageView.setFitHeight(s);
         imageView.setFitWidth(s);
     }
