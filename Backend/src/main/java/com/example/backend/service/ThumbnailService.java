@@ -1,5 +1,6 @@
 package com.example.backend.service;
 
+import com.example.backend.model.DirectoryContents;
 import com.example.backend.model.Image;
 import com.example.backend.model.Thumbnail;
 import com.example.backend.repositories.ImageRepository;
@@ -13,8 +14,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
-import java.io.IOException;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -46,10 +47,11 @@ public class ThumbnailService {
         });
     }
 
-    public Single<Collection<Thumbnail>> getPathThumbnails(String path){
+    public Single<DirectoryContents> getPathContents(String path){
         return Single.create(subscriber -> {
-            Collection<Thumbnail> thumbnails = thumbnailRepository.findAllByPath(path);
-            subscriber.onSuccess(thumbnails);
+            Collection<Thumbnail> thumbnails = thumbnailRepository.findAllThumbnailsByPath(path);
+            List<String> directories = thumbnailRepository.findByPathStartsWith(path).stream().map(Thumbnail::getPath).distinct().toList();
+            subscriber.onSuccess(new DirectoryContents(thumbnails, directories));
         });
     }
 
