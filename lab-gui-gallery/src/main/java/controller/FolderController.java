@@ -18,14 +18,14 @@ public class FolderController implements ImageSizeChangeListener {
 
     private final GalleryController galleryController;
     private final SteeringController steeringController;
-    private final String relativePath;
+    private final String folderName;
 
     private ImageView imageView;
 
-    public FolderController(GalleryController galleryController, SteeringController steeringController, String relativePath) {
+    public FolderController(GalleryController galleryController, SteeringController steeringController, String folderName) {
         this.galleryController = galleryController;
         this.steeringController = steeringController;
-        this.relativePath = relativePath;
+        this.folderName = folderName;
     }
 
     @FXML
@@ -39,7 +39,7 @@ public class FolderController implements ImageSizeChangeListener {
         imageView.setFitHeight(size);
         imageView.setFitWidth(size);
         imageView.setOnMouseClicked(event -> { showDirectory(); });
-        var label = new Label(relativePath);
+        var label = new Label(folderName);
         label.setTextFill(Color.color(1, 0, 0));
         label.setStyle("-fx-font-weight: bold");
         label.setBackground(new Background(new BackgroundFill(Color.rgb(0, 0, 80, 0.7), new CornerRadii(5.0), new Insets(-5.0))));
@@ -49,7 +49,7 @@ public class FolderController implements ImageSizeChangeListener {
     }
 
     private void showDirectory() {
-        galleryController.refresh(relativePath);
+        galleryController.goToDirectory(folderName);
     }
 
     @Override

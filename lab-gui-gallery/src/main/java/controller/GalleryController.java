@@ -28,11 +28,12 @@ public class GalleryController implements ImageSizeChangeListener {
 
     private int rowIndex = 0;
     private int columnIndex = 0;
-    private String relativePath = ".";
+
     private final HashSet<String> names = new HashSet<String>();
 
     private final SteeringController steeringController;
     private final IRetrofitService retrofitService;
+    private final PathController pathController = new PathController();
 
     @FXML
     private HBox box;
@@ -54,7 +55,7 @@ public class GalleryController implements ImageSizeChangeListener {
         gridPane.setBackground(new Background(new BackgroundFill(Color.AQUAMARINE, new CornerRadii(0), new Insets(0))));
         var rootLayout = Root.<VBox>createElement("view/steering.fxml", steeringController);
         box.getChildren().add(0, rootLayout);
-        refresh(relativePath);
+        refresh();
     }
 
     public <T extends Node> void loadRootLayout(T rootLayout) {
@@ -69,14 +70,14 @@ public class GalleryController implements ImageSizeChangeListener {
         }
     }
 
-    public void refresh(String path) {
-        System.out.println(path);
+    public void refresh() {
         rowIndex = 0;
         columnIndex = 0;
-        relativePath = path;
         gridPane.getChildren().clear();
         names.clear();
         retrofitService.cancelAll();
+        var path = pathController.getCurrentPath();
+        System.out.println(path);
         retrofitService.getThumbnails(path, new NetworkCallback<Collection<ThumbnailDAO>>() {
             @Override
             public void process(Collection<ThumbnailDAO> result) throws IOException {
@@ -92,17 +93,18 @@ public class GalleryController implements ImageSizeChangeListener {
     }
 
     public void goUp() {
-        if (relativePath.equals(".")) {
-            return;
+        if (pathController.tryGoUp()) {
+            refresh();
         }
+    }
 
-        var index = relativePath.lastIndexOf("/");
-        var path = relativePath.substring(0, index);
-        refresh(path);
+    public void goToDirectory(String name) {
+        pathController.goToDirectory(name);
+        refresh();
     }
 
     public String getRelativePath() {
-        return relativePath;
+        return pathController.getCurrentPath();
     }
 
     public boolean hasDirectory(String name) {
@@ -111,8 +113,7 @@ public class GalleryController implements ImageSizeChangeListener {
 
     public void createDirectory(String name) {
         names.add(name);
-        var path = getRelativePath() + "/" + name;
-        var controller = new FolderController(this, steeringController, path);
+        var controller = new FolderController(this, steeringController, name);
         var rootLayout = Root.<VBox>createElement("view/folder.fxml", controller);
         loadRootLayout(rootLayout);
     }
