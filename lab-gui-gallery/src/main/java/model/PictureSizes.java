@@ -5,7 +5,7 @@ public enum PictureSizes {
     Medium(Sizes.MEDIUM),
     Large(Sizes.LARGE);
 
-    private int size;
+    private final int size;
 
     private PictureSizes(int size) {
         this.size = size;
