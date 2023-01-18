@@ -1,6 +1,5 @@
 package com.example.backend.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.boot.jackson.JsonComponent;
 
 import javax.persistence.*;
@@ -38,7 +37,6 @@ public class Thumbnail {
 
     @OneToOne
     @JoinColumn(name = "imageId")
-    @JsonIgnore
     private Image image;
 
     public Thumbnail() {}
