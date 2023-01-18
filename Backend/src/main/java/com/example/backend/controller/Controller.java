@@ -1,5 +1,6 @@
 package com.example.backend.controller;
 
+import com.example.backend.model.DirectoryContents;
 import com.example.backend.model.Image;
 import com.example.backend.model.Thumbnail;
 import com.example.backend.service.ImageService;
@@ -39,8 +40,8 @@ public class Controller {
     }
 
     @GetMapping(path = "/path/{path}")
-    public Single<ResponseEntity<Collection<Thumbnail>>> getImage(@PathVariable String path) {
-        return thumbnailService.getPathThumbnails(path).subscribeOn(Schedulers.io())
+    public Single<ResponseEntity<DirectoryContents>> getImage(@PathVariable String path) {
+        return thumbnailService.getPathContents(path).subscribeOn(Schedulers.io())
                 .map(r -> new ResponseEntity<>(r, HttpStatus.OK))
                 .onErrorReturnItem(new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR));
     }
