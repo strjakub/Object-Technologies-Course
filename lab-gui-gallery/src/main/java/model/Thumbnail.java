@@ -2,15 +2,15 @@ package model;
 
 public class Thumbnail {
 
-    private final int id;
+    private final int imageId;
     private final byte[] small;
     private final byte[] medium;
     private final byte[] large;
     private final String extension;
     private final String path;
 
-    public Thumbnail(int id, byte[] small, byte[] medium, byte[] large, String extension, String path) {
-        this.id = id;
+    public Thumbnail(int imageId, byte[] small, byte[] medium, byte[] large, String extension, String path) {
+        this.imageId = imageId;
         this.small = small;
         this.medium = medium;
         this.large = large;
@@ -18,8 +18,8 @@ public class Thumbnail {
         this.path = path;
     }
 
-    public int getId() {
-        return id;
+    public int getImageId() {
+        return imageId;
     }
 
     public byte[] getImage(PictureSizes size) {
