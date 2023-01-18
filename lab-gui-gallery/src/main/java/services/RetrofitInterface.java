@@ -1,5 +1,7 @@
 package services;
 
+import java.util.Collection;
+
 import model.Picture;
 import model.PictureDAO;
 import model.ThumbnailDAO;
@@ -8,6 +10,7 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface RetrofitInterface {
 
@@ -19,4 +22,7 @@ public interface RetrofitInterface {
 
     @GET("thumbnail/{id}")
     Call<ThumbnailDAO> getThumbnail(@Path("id") Integer id);
+
+    @GET("path")
+    Call<Collection<ThumbnailDAO>> getThumbnails(@Query("path") String path);
 }

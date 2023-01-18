@@ -1,13 +1,21 @@
 package model;
 
 public enum PictureSizes {
-    Small,
-    Medium,
-    Large;
+    Small(Sizes.SMALL),
+    Medium(Sizes.MEDIUM),
+    Large(Sizes.LARGE);
 
-    public static final int SIZE_SMALL = 50;
-    public static final int SIZE_MEDIUM = 100;
-    public static final int SIZE_LARGE = 200;
+    private int size;
+
+    private PictureSizes(int size) {
+        this.size = size;
+    }
+
+    class Sizes {
+        public static final int SMALL = 50;
+        public static final int MEDIUM = 100;
+        public static final int LARGE = 200;
+    }
 
     public static PictureSizes create(String x) {
         
@@ -24,10 +32,6 @@ public enum PictureSizes {
     }
 
     public int toInt() {
-        return switch (this) {
-            case Small -> SIZE_SMALL;
-            case Medium -> SIZE_MEDIUM;
-            case Large -> SIZE_LARGE;
-        };
+        return size;
     }
 }

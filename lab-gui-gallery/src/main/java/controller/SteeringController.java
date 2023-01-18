@@ -138,4 +138,8 @@ public class SteeringController implements Initializable {
     public PictureSizes getCurrentSize() {
         return currentSize;
     }
+
+    public int getCurrentIntSize() {
+        return currentSize.toInt();
+    }
 }
