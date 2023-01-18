@@ -57,7 +57,7 @@ public class PictureController implements ImageSizeChangeListener {
     }
 
     public void setThumbnail(Thumbnail thumbnail) {
-        this.id = 2;
+        this.id = thumbnail.getId();
         this.thumbnail = thumbnail;
     }
 

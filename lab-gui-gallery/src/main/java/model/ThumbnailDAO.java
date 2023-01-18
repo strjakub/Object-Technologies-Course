@@ -4,6 +4,7 @@ import java.util.Base64;
 
 public class ThumbnailDAO {
     
+    private int id;
     private String small;
     private String medium;
     private String large;
@@ -14,7 +15,7 @@ public class ThumbnailDAO {
         var sm = Base64.getDecoder().decode(dto.small);
         var md = Base64.getDecoder().decode(dto.medium);
         var lg = Base64.getDecoder().decode(dto.large);
-        return new Thumbnail(sm, md, lg, dto.extension, dto.path);
+        return new Thumbnail(dto.id, sm, md, lg, dto.extension, dto.path);
     }
 
 }
