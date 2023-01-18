@@ -4,6 +4,7 @@ import com.example.backend.model.Image;
 import com.example.backend.model.Thumbnail;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
@@ -16,6 +17,8 @@ public interface ThumbnailRepository extends JpaRepository<Thumbnail, Integer> {
     Optional<Thumbnail> findByImage_Id(Image img);
 
     @Query("SELECT t FROM Thumbnail t WHERE t.large IS NOT NULL AND t.medium IS NOT NULL AND t.small IS NOT NULL AND t.path = ?1")
-    Collection<Thumbnail> findAllByPath(String path);
+    Collection<Thumbnail> findAllThumbnailsByPath(String path);
+
+    Collection<Thumbnail> findByPathStartsWith(String path);
 
 }

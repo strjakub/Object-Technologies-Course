@@ -1,5 +1,6 @@
 package com.example.backend.controller;
 
+import com.example.backend.model.DirectoryContents;
 import com.example.backend.model.Image;
 import com.example.backend.model.Thumbnail;
 import com.example.backend.service.ImageService;
@@ -8,7 +9,6 @@ import com.example.backend.watcher.DirectoryWatcher;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -39,9 +39,9 @@ public class Controller {
                 .defaultIfEmpty(new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
     }
 
-    @GetMapping(path = "/path")
-    public Single<ResponseEntity<Collection<Thumbnail>>> getImage(@RequestParam String path) {
-        return thumbnailService.getPathThumbnails(path).subscribeOn(Schedulers.io())
+    @GetMapping(path = "/path/{path}")
+    public Single<ResponseEntity<DirectoryContents>> getImage(@PathVariable String path) {
+        return thumbnailService.getPathContents(path).subscribeOn(Schedulers.io())
                 .map(r -> new ResponseEntity<>(r, HttpStatus.OK))
                 .onErrorReturnItem(new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR));
     }
