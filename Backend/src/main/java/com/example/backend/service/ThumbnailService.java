@@ -50,10 +50,7 @@ public class ThumbnailService {
     public Single<DirectoryContents> getPathContents(String path){
         return Single.create(subscriber -> {
             Collection<Thumbnail> thumbnails = thumbnailRepository.findAllThumbnailsByPath(path);
-            List<String> directories = thumbnailRepository.findByPathStartsWith(path)
-                    .stream().map(Thumbnail::getPath)
-                    .filter(x -> x.length() > path.length())
-                    .map(x -> x.substring(path.length() + 1)).distinct().toList();
+            Collection<String> directories = thumbnailRepository.findDirectories(path, path.length());
             subscriber.onSuccess(new DirectoryContents(thumbnails, directories));
         });
     }
