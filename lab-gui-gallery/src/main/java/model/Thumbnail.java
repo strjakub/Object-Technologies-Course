@@ -13,11 +13,7 @@ public class Thumbnail {
         this.medium = medium;
         this.large = large;
     }
-
-    public int getPictureId() {
-        return picture.getId();
-    }
-
+    
     public byte[] getImage(PictureSizes size) {
         if (size == PictureSizes.Small)
             return small;
@@ -29,14 +25,6 @@ public class Thumbnail {
             return large;
         
         throw new IllegalArgumentException(size.toString());
-    }
-
-    public String getExtension() {
-        return picture.getExtension();
-    }
-
-    public String getPath() {
-        return picture.getPath();
     }
 
     public byte[] getOriginal() {
