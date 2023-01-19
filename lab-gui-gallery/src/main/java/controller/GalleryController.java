@@ -92,8 +92,8 @@ public class GalleryController implements ImageSizeChangeListener {
                 }
 
                 for (var directory: content.getDirectories()) {
-                    var controller = new FolderController(reference, steeringController, directory);
-                    var rootLayout = Root.<VBox>createElement("view/folder.fxml", controller);
+                    var controller = new DirectoryController(reference, steeringController, directory);
+                    var rootLayout = Root.<VBox>createElement("view/directory.fxml", controller);
                     loadRootLayout(rootLayout);
                 }
             } 
@@ -121,8 +121,8 @@ public class GalleryController implements ImageSizeChangeListener {
 
     public void createDirectory(String name) {
         names.add(name);
-        var controller = new FolderController(this, steeringController, name);
-        var rootLayout = Root.<VBox>createElement("view/folder.fxml", controller);
+        var controller = new DirectoryController(this, steeringController, name);
+        var rootLayout = Root.<VBox>createElement("view/directory.fxml", controller);
         loadRootLayout(rootLayout);
     }
 

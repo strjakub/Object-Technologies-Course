@@ -3,6 +3,7 @@ package controller;
 public class PathController {
     
     private static final String ROOT_PATH = ".";
+    private static final String SLASH = "/";
 
     private String path = ROOT_PATH;
 
@@ -19,12 +20,12 @@ public class PathController {
             return false;
         }
 
-        var index = path.lastIndexOf("/");
+        var index = path.lastIndexOf(SLASH);
         path = path.substring(0, index);
         return true;
     }
 
     public void goToDirectory(String name) {
-        path += "/" + name;
+        path += SLASH + name;
     }
 }
