@@ -1,7 +1,6 @@
 package services;
 
-import java.util.Collection;
-
+import model.DirectoryContentsDAO;
 import model.Picture;
 import model.PictureDAO;
 import model.ThumbnailDAO;
@@ -24,5 +23,5 @@ public interface RetrofitInterface {
     Call<ThumbnailDAO> getThumbnail(@Path("id") Integer id);
 
     @GET("path")
-    Call<Collection<ThumbnailDAO>> getThumbnails(@Query("path") String path);
+    Call<DirectoryContentsDAO> getPathContents(@Query("path") String path);
 }
