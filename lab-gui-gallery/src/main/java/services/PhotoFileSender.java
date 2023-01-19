@@ -20,6 +20,6 @@ public class PhotoFileSender implements IFileSender {
         var path  = Paths.get(fullPath);
         var bytes = Files.readAllBytes(path);
         var image = new Picture(bytes, extension, relativePath);
-        retrofitService.postImage(image, callback);
+        retrofitService.postPicture(image, callback);
     }
 }

@@ -23,7 +23,7 @@ public class ZipFileSender implements IFileSender {
                 var stream = zip.getInputStream(entry);
                 var bytes = stream.readAllBytes();
                 var image = new Picture(bytes, extension, relativePath);
-                retrofitService.postImage(image, callback);
+                retrofitService.postPicture(image, callback);
             }
         }
         zip.close();

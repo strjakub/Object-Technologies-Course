@@ -25,8 +25,8 @@ public class RetrofitService implements IRetrofitService {
     }
     
     @Override
-    public void postImage(Picture image, NetworkCallback<Integer> callback) {
-        retryPolicy.execute(getApInterface().postImage(image), callback);
+    public void postPicture(Picture image, NetworkCallback<Integer> callback) {
+        retryPolicy.execute(getApInterface().postPicture(image), callback);
     }
 
     @Override
