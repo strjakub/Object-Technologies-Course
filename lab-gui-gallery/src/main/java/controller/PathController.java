@@ -3,7 +3,7 @@ package controller;
 public class PathController {
     
     private static final String ROOT_PATH = ".";
-    private static final String SLASH = "/";
+    private static final String SLASH = "\\";
 
     private String path = ROOT_PATH;
 
