@@ -17,7 +17,17 @@ public interface ThumbnailRepository extends JpaRepository<Thumbnail, Integer> {
 
     @Query("SELECT t FROM Thumbnail t WHERE t.large IS NOT NULL AND t.medium IS NOT NULL AND t.small IS NOT NULL AND t.path = ?1")
     Collection<Thumbnail> findAllThumbnailsByPath(String path);
-    @Query("SELECT DISTINCT case when substring(t.path, ?2 + 2) LIKE '%/%' then substring(substring(t.path, ?2 + 2), 1, instr(substring(t.path, ?2 + 2), '/') - 1) else substring(t.path, ?2 + 2) end FROM Thumbnail t WHERE t.large IS NOT NULL AND t.medium IS NOT NULL AND t.small IS NOT NULL AND t.path LIKE ?1% AND length(t.path) > ?2")
-    Collection<String> findDirectories(String path, int pathLength);
-
+    @Query(value = """
+        SELECT DISTINCT
+            CASE
+                WHEN path LIKE '%/%' THEN SUBSTRING(path, 1, INSTR(path, '/') - 1)
+                ELSE path
+            END
+        FROM
+        (
+            SELECT SUBSTRING(t.path, length(?1) + 2) path
+            FROM Thumbnail t
+            WHERE t.large IS NOT NULL AND t.medium IS NOT NULL AND t.small IS NOT NULL AND t.path LIKE CONCAT(?1, '_%')
+        )""", nativeQuery = true)
+    Collection<String> findDirectories(String path);
 }
