@@ -14,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.Collection;
 
 @Slf4j
 @RestController
@@ -30,13 +29,6 @@ public class Controller {
         this.imageService = imageService;
         this.directoryWatcher = directoryWatcher;
         directoryWatcher.watch();
-    }
-
-    @GetMapping(path = "{id}")
-    public Single<ResponseEntity<Image>> getImage(@PathVariable int id) {
-        return imageService.getImage(id).subscribeOn(Schedulers.io())
-                .map(r -> new ResponseEntity<>(r, HttpStatus.OK))
-                .defaultIfEmpty(new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
     }
 
     @GetMapping(path = "/path")

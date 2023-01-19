@@ -2,7 +2,6 @@ package com.example.backend.service;
 
 import com.example.backend.model.Image;
 import com.example.backend.repositories.ImageRepository;
-import io.reactivex.rxjava3.core.Maybe;
 import io.reactivex.rxjava3.core.Single;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +19,4 @@ public class ImageService {
         return Single.fromCallable(() -> imageRepository.save(image).getId());
     }
 
-    public Maybe<Image> getImage(int id) {
-        return Maybe.fromOptional(imageRepository.findById(id));
-    }
 }
