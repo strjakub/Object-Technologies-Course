@@ -5,6 +5,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.function.UnaryOperator;
+import java.util.regex.Pattern;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -16,6 +18,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -118,6 +121,18 @@ public class SteeringController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
+        var pattern = Pattern.compile("[a-zA-Z0-9]*");
+        UnaryOperator<TextFormatter.Change> filter = c -> {
+            if (pattern.matcher(c.getControlNewText()).matches()) {
+                return c;
+            } else {
+                return null;
+            }
+        };
+        var formatter = new TextFormatter<>(filter);
+        textField.setTextFormatter(formatter);
+
         comboBox.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
             
             @Override
