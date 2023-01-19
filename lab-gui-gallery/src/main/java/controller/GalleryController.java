@@ -1,7 +1,6 @@
 package controller;
 
 import java.io.IOException;
-import java.util.Collection;
 import java.util.HashSet;
 
 import javafx.fxml.FXML;
@@ -14,9 +13,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import model.DirectoryContentsDAO;
 import model.ImageSizeChangeListener;
 import model.PictureSizes;
-import model.ThumbnailDAO;
 import services.IRetrofitService;
 import services.NetworkCallback;
 import services.Root;
@@ -78,11 +77,11 @@ public class GalleryController implements ImageSizeChangeListener {
         retrofitService.cancelAll();
         var path = pathController.getCurrentPath();
         System.out.println(path);
-        retrofitService.getThumbnails(path, new NetworkCallback<Collection<ThumbnailDAO>>() {
+        retrofitService.getPathContents(path, new NetworkCallback<DirectoryContentsDAO>() {
             @Override
-            public void process(Collection<ThumbnailDAO> result) throws IOException {
-                for (var dao: result) {
-                    var thumbnail = ThumbnailDAO.convertTo(dao);
+            public void process(DirectoryContentsDAO result) throws IOException {
+                var content = DirectoryContentsDAO.convertTo(result);
+                for (var thumbnail: content.getThumbnails()) {
                     var controller = new PictureController(retrofitService, steeringController);
                     controller.setThumbnail(thumbnail);
                     var rootLayout = Root.<VBox>createElement("view/picture.fxml", controller);
