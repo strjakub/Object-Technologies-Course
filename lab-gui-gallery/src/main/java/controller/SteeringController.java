@@ -57,10 +57,10 @@ public class SteeringController implements Initializable {
         var error = "";
 
         if (name == "") {
-            error = "Folder nie może mieć pustej nazwy";
+            error = "Empty directory name forbidden";
         }
         else if (galleryController.hasDirectory(name)) {
-            error = "Folder o podanej nazwie juz istnieje";
+            error = "Directory already exists";
         }
 
         if (error != "") {
