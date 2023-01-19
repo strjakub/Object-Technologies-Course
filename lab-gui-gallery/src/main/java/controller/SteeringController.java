@@ -108,7 +108,7 @@ public class SteeringController implements Initializable {
             @Override
             public void process(Integer result) throws IOException {
                 var controller = new PictureController(retrofitService, reference);
-                controller.setId(result);
+                controller.loadThubmnail(result);
                 var rootLayout = Root.<VBox>createElement("view/picture.fxml", controller);
                 galleryController.loadRootLayout(rootLayout);
             }

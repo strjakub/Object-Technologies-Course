@@ -24,7 +24,6 @@ public class PictureController implements ImageSizeChangeListener {
     private final IRetrofitService retrofitService;
     private final SteeringController steeringController;
 
-    private Integer id;
     private ProgressIndicator progress;
     private Thumbnail thumbnail;
     private ImageView imageView;
@@ -37,8 +36,7 @@ public class PictureController implements ImageSizeChangeListener {
         this.steeringController = steeringController;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void loadThubmnail(Integer id) {
         retrofitService.getThumbnail(id, new NetworkCallback<ThumbnailDAO>() {
             @Override
             public void process(ThumbnailDAO result) throws IOException {
@@ -56,7 +54,6 @@ public class PictureController implements ImageSizeChangeListener {
     }
 
     public void setThumbnail(Thumbnail thumbnail) {
-        this.id = thumbnail.getPictureId();
         this.thumbnail = thumbnail;
     }
 
