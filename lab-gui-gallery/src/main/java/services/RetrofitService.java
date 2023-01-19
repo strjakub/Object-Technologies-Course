@@ -1,8 +1,5 @@
 package services;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-
 import model.DirectoryContentsDAO;
 import model.Picture;
 import model.PictureDAO;
@@ -45,13 +42,6 @@ public class RetrofitService implements IRetrofitService {
 
     @Override
     public void getPathContents(String path, NetworkCallback<DirectoryContentsDAO> callback) {
-        
-        try {
-            path = URLEncoder.encode(path, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            throw new IllegalArgumentException(e);
-        }
-
         retryPolicy.execute(getApInterface().getPathContents(path), callback);
     }
 

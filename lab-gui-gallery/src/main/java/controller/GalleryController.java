@@ -77,14 +77,23 @@ public class GalleryController implements ImageSizeChangeListener {
         retrofitService.cancelAll();
         var path = pathController.getCurrentPath();
         System.out.println(path);
+
+        var reference = this;
         retrofitService.getPathContents(path, new NetworkCallback<DirectoryContentsDAO>() {
             @Override
             public void process(DirectoryContentsDAO result) throws IOException {
                 var content = DirectoryContentsDAO.convertTo(result);
+
                 for (var thumbnail: content.getThumbnails()) {
                     var controller = new PictureController(retrofitService, steeringController);
                     controller.setThumbnail(thumbnail);
                     var rootLayout = Root.<VBox>createElement("view/picture.fxml", controller);
+                    loadRootLayout(rootLayout);
+                }
+
+                for (var directory: content.getDirectories()) {
+                    var controller = new FolderController(reference, steeringController, directory);
+                    var rootLayout = Root.<VBox>createElement("view/folder.fxml", controller);
                     loadRootLayout(rootLayout);
                 }
             } 
