@@ -2,7 +2,6 @@ package services;
 
 import model.DirectoryContentsDAO;
 import model.Picture;
-import model.PictureDAO;
 import model.ThumbnailDAO;
 
 public class RetrofitService implements IRetrofitService {
@@ -28,11 +27,6 @@ public class RetrofitService implements IRetrofitService {
     @Override
     public void postImage(Picture image, NetworkCallback<Integer> callback) {
         retryPolicy.execute(getApInterface().postImage(image), callback);
-    }
-
-    @Override
-    public void getImage(Integer id, NetworkCallback<PictureDAO> callback) {        
-        retryPolicy.execute(getApInterface().getImage(id), callback);
     }
 
     @Override

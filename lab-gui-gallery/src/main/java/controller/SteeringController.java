@@ -57,10 +57,10 @@ public class SteeringController implements Initializable {
         var error = "";
 
         if (name == "") {
-            error = "Folder nie może mieć pustej nazwy";
+            error = "Empty directory name forbidden";
         }
         else if (galleryController.hasDirectory(name)) {
-            error = "Folder o podanej nazwie juz istnieje";
+            error = "Directory already exists";
         }
 
         if (error != "") {
@@ -108,7 +108,7 @@ public class SteeringController implements Initializable {
             @Override
             public void process(Integer result) throws IOException {
                 var controller = new PictureController(retrofitService, reference);
-                controller.setId(result);
+                controller.loadThubmnail(result);
                 var rootLayout = Root.<VBox>createElement("view/picture.fxml", controller);
                 galleryController.loadRootLayout(rootLayout);
             }

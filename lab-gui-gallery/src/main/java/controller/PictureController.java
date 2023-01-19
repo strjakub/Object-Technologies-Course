@@ -13,7 +13,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.ImageSizeChangeListener;
-import model.PictureDAO;
 import model.PictureSizes;
 import model.Thumbnail;
 import model.ThumbnailDAO;
@@ -25,7 +24,6 @@ public class PictureController implements ImageSizeChangeListener {
     private final IRetrofitService retrofitService;
     private final SteeringController steeringController;
 
-    private Integer id;
     private ProgressIndicator progress;
     private Thumbnail thumbnail;
     private ImageView imageView;
@@ -38,8 +36,7 @@ public class PictureController implements ImageSizeChangeListener {
         this.steeringController = steeringController;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void loadThubmnail(Integer id) {
         retrofitService.getThumbnail(id, new NetworkCallback<ThumbnailDAO>() {
             @Override
             public void process(ThumbnailDAO result) throws IOException {
@@ -57,7 +54,6 @@ public class PictureController implements ImageSizeChangeListener {
     }
 
     public void setThumbnail(Thumbnail thumbnail) {
-        this.id = thumbnail.getImageId();
         this.thumbnail = thumbnail;
     }
 
@@ -81,24 +77,18 @@ public class PictureController implements ImageSizeChangeListener {
     }
 
     private void showPicture() {
-        retrofitService.getImage(id, new NetworkCallback<PictureDAO>() {
-            @Override
-            public void process(PictureDAO result) throws IOException { 
-                var stage = new Stage();
-                var image = PictureDAO.convertTo(result);
-                var bytes = image.getData();
-                var img = new Image(new ByteArrayInputStream(bytes));
-                var imageView = new ImageView(img);
-                var box = new HBox();
-                box.getChildren().add(imageView);
-                stage.setScene(new Scene(box));
-                stage.setTitle("Original Image");
-                stage.setResizable(false);
-                stage.initModality(Modality.WINDOW_MODAL);
-                stage.initOwner(container.getScene().getWindow() );
-                stage.show();
-            }
-        });
+        var stage = new Stage();
+        var bytes = thumbnail.getOriginal();
+        var img = new Image(new ByteArrayInputStream(bytes));
+        var imageView = new ImageView(img);
+        var box = new HBox();
+        box.getChildren().add(imageView);
+        stage.setScene(new Scene(box));
+        stage.setTitle("Original Image");
+        stage.setResizable(false);
+        stage.initModality(Modality.WINDOW_MODAL);
+        stage.initOwner(container.getScene().getWindow() );
+        stage.show();
     }
 
     @Override
