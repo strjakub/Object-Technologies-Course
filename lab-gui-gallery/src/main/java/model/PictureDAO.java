@@ -9,12 +9,8 @@ public class PictureDAO {
     private String extension;
     private String path;
     
-    public int getId() {
-        return id;
-    }
-
-    public static Picture convertTo(PictureDAO dto) {
-        var data = Base64.getDecoder().decode(dto.data);
-        return new Picture(data, dto.extension, dto.path);
+    public static Picture convertTo(PictureDAO dao) {
+        var data = Base64.getDecoder().decode(dao.data);
+        return new Picture(dao.id, data, dao.extension, dao.path);
     }
 }
