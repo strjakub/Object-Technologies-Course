@@ -111,6 +111,6 @@ public class DirectoryWatcher {
         if (resources.relativize(path).toString().equals("")) {
             return ".";
         }
-        return ".\\" + resources.relativize(path);
+        return "./" + resources.relativize(path).toString().replace('\\', '/');
     }
 }
