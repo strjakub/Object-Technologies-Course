@@ -28,6 +28,7 @@ public interface ThumbnailRepository extends JpaRepository<Thumbnail, Integer> {
             SELECT SUBSTRING(t.path, length(?1) + 2) path
             FROM Thumbnail t
             WHERE t.large IS NOT NULL AND t.medium IS NOT NULL AND t.small IS NOT NULL AND t.path LIKE CONCAT(?1, '_%')
-        )""", nativeQuery = true)
+        )
+        ORDER BY 1""", nativeQuery = true)
     Collection<String> findDirectories(String path);
 }

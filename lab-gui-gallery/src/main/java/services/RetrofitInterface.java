@@ -2,7 +2,6 @@ package services;
 
 import model.DirectoryContentsDAO;
 import model.Picture;
-import model.PictureDAO;
 import model.ThumbnailDAO;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -14,10 +13,7 @@ import retrofit2.http.Query;
 public interface RetrofitInterface {
 
     @POST("/")
-    Call<Integer> postImage(@Body Picture image);
-
-    @GET("{id}")
-    Call<PictureDAO> getImage(@Path("id") Integer id);
+    Call<Integer> postPicture(@Body Picture image);
 
     @GET("thumbnail/{id}")
     Call<ThumbnailDAO> getThumbnail(@Path("id") Integer id);
