@@ -82,6 +82,7 @@ public class ThumbnailService {
                 thumbnail.setLarge(large);
                 thumbnailRepository.save(thumbnail);
             }
+            log.info("Ended generating thumbnails");
         }).subscribeOn(Schedulers.computation()).subscribe();
     }
 }
