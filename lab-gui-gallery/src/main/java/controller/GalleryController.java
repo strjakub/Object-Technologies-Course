@@ -84,16 +84,16 @@ public class GalleryController implements ImageSizeChangeListener {
             public void process(DirectoryContentsDAO result) throws IOException {
                 var content = DirectoryContentsDAO.convertTo(result);
 
+                for (var directory: content.getDirectories()) {
+                    var controller = new DirectoryController(reference, steeringController, directory);
+                    var rootLayout = Root.<VBox>createElement("view/directory.fxml", controller);
+                    loadRootLayout(rootLayout);
+                }
+
                 for (var thumbnail: content.getThumbnails()) {
                     var controller = new PictureController(retrofitService, steeringController);
                     controller.setThumbnail(thumbnail);
                     var rootLayout = Root.<VBox>createElement("view/picture.fxml", controller);
-                    loadRootLayout(rootLayout);
-                }
-
-                for (var directory: content.getDirectories()) {
-                    var controller = new DirectoryController(reference, steeringController, directory);
-                    var rootLayout = Root.<VBox>createElement("view/directory.fxml", controller);
                     loadRootLayout(rootLayout);
                 }
             } 
