@@ -10,18 +10,18 @@ import javafx.scene.paint.Color;
 import model.ImageSizeChangeListener;
 import model.PictureSizes;
 
-public class FolderController implements ImageSizeChangeListener {
+public class DirectoryController implements ImageSizeChangeListener {
 
     private final GalleryController galleryController;
     private final SteeringController steeringController;
-    private final String folderName;
+    private final String directoryName;
 
     private ImageView imageView;
 
-    public FolderController(GalleryController galleryController, SteeringController steeringController, String folderName) {
+    public DirectoryController(GalleryController galleryController, SteeringController steeringController, String directoryName) {
         this.galleryController = galleryController;
         this.steeringController = steeringController;
-        this.folderName = folderName;
+        this.directoryName = directoryName;
     }
 
     @FXML
@@ -29,13 +29,13 @@ public class FolderController implements ImageSizeChangeListener {
 
     public void initialize() {
         var pane = new StackPane();
-        var img = new Image(getClass().getResource("/folder.png").toString());
+        var img = new Image(getClass().getResource("/directory.png").toString());
         imageView = new ImageView(img);
         var size = steeringController.getCurrentIntSize();
         imageView.setFitHeight(size);
         imageView.setFitWidth(size);
         imageView.setOnMouseClicked(event -> { showDirectory(); });
-        var label = new Label(folderName);
+        var label = new Label(directoryName);
         label.setTextFill(Color.color(1, 0, 0));
         label.setOnMouseClicked(event -> { showDirectory(); });
         label.setStyle("-fx-font-weight: bold");
@@ -45,7 +45,7 @@ public class FolderController implements ImageSizeChangeListener {
     }
 
     private void showDirectory() {
-        galleryController.goToDirectory(folderName);
+        galleryController.goToDirectory(directoryName);
     }
 
     @Override
