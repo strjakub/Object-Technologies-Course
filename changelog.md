@@ -27,10 +27,24 @@
 - Added ImageDto for incoming responses in frontend
 - Added possibility to send png, jpg, bmp
 - Added fake rezising image simulation as waiting random time from 2 to 10 seconds
+## 08.01.2023
+- Added directroy watcher (faulty)
 ## 09.01.2023
 - Preparing Entities for thumbnails in multiple sizes
+## 15.01.2023
+    added combobox for picture sizes
+
 ## 16.01.2023
 - Generating thumbnails in all sizes after receiving image
 - server restart queries
 ## 17.01.2023
 - Server restart done
+- added retyr callback using backoff.decolerrated jitter
+- added retry policy builder
+- added path controller
+- change api schema call to directorycontent
+
+## 19.01.2023
+- Directory Watcher fixed and done
+- move findirectories logic to sql query
+- added a-zA-Z0-9 patterm for directories namess
