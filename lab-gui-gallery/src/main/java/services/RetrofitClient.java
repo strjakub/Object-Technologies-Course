@@ -29,7 +29,7 @@ public class RetrofitClient implements IRetrofitClient  {
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(client)
-                .callbackExecutor(Executors.newSingleThreadExecutor())
+                .callbackExecutor(Executors.newCachedThreadPool())
                 .build();
         }
     
