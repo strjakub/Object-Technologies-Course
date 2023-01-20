@@ -3,6 +3,7 @@ package com.example.backend.watcher;
 import com.example.backend.model.Image;
 import com.example.backend.service.ImageService;
 import com.example.backend.service.ThumbnailService;
+import com.example.backend.utils.ByteReader;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import lombok.SneakyThrows;
@@ -10,8 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.data.util.Pair;
-import org.springframework.retry.annotation.Backoff;
-import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -39,8 +38,11 @@ public class DirectoryWatcher {
 
     private final List<Integer> watchedImageIds = new ArrayList<>();
 
+    private final ByteReader byteReader;
+
     @SneakyThrows
-    public DirectoryWatcher(ImageService imageService, ThumbnailService thumbnailService) {
+    public DirectoryWatcher(ImageService imageService, ThumbnailService thumbnailService, ByteReader byteReader) {
+        this.byteReader = byteReader;
         this.resources = Paths.get(DirectoryWatcher.class.getResource("Images").toURI());
         this.watchService = FileSystems.getDefault().newWatchService();
         this.imageService = imageService;
@@ -83,7 +85,7 @@ public class DirectoryWatcher {
                             log.warn("file is not one of accepted image formats");
                         } else {
                             Path imagePath = parentPath.resolve(event.context().toString());
-                            byte[] data = readFile(imagePath);
+                            byte[] data = byteReader.readFile(imagePath);
                             String extension = FilenameUtils.getExtension(event.context().toString());
                             Image newImage = new Image(data, extension, getImagePath(parentPath));
                             imageService.uploadImage(newImage).subscribeOn(Schedulers.computation()).subscribe(id -> watchedImageIds.add(id));
@@ -100,11 +102,6 @@ public class DirectoryWatcher {
 
     private boolean isFolder(WatchEvent<?> event, Path parentPath) throws MalformedURLException {
         return FileUtils.isDirectory(FileUtils.toFile(parentPath.resolve(event.context().toString()).toUri().toURL()));
-    }
-
-    @Retryable(maxAttempts = 5, backoff = @Backoff(delay = 3000))
-    private byte[] readFile(Path path) throws IOException {
-        return Files.readAllBytes(path);
     }
 
     private String getImagePath(Path path) {
