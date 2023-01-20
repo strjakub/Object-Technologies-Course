@@ -20,4 +20,4 @@ Za każdym razym gdy wysłamy zdjęcie na server, generuje on 3 rozmiary miniatu
 
 ### Restart Servera
 
-todo...
+Server przy starcie przeszukuje baze danych w poszukiwaniu zdjęć bez wygenerowanych miniatur oraz tych z wygenerowanymi tylko niektórymi rozmiarami miniatur. Następnie przekazuje znalezione braki do generatora miniatur aby je uzupełnić (generowane są tylko wymagane rozmiary).

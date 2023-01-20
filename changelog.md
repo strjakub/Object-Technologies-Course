@@ -27,3 +27,10 @@
 - Added ImageDto for incoming responses in frontend
 - Added possibility to send png, jpg, bmp
 - Added fake rezising image simulation as waiting random time from 2 to 10 seconds
+## 09.01.2023
+- Preparing Entities for thumbnails in multiple sizes
+## 16.01.2023
+- Generating thumbnails in all sizes after receiving image
+- server restart queries
+## 17.01.2023
+- Server restart done
