@@ -26,6 +26,7 @@ public class PictureController implements ImageSizeChangeListener {
 
     private ProgressIndicator progress;
     private Thumbnail thumbnail;
+    private Integer pictureId;
     private ImageView imageView;
 
     @FXML
@@ -37,11 +38,15 @@ public class PictureController implements ImageSizeChangeListener {
     }
 
     public void loadThubmnail(Integer id) {
+        pictureId = id;
         retrofitService.getThumbnail(id, new NetworkCallback<ThumbnailDAO>() {
             @Override
             public void process(ThumbnailDAO result) throws IOException {
+
+                if (result == null) System.out.println("qwqwq");
+
                 thumbnail = ThumbnailDAO.convertTo(result);
-                var img = new Image(new ByteArrayInputStream(thumbnail.getImage(steeringController.getCurrentSize())));
+                var img = new Image(new ByteArrayInputStream(thumbnail.getPicture(steeringController.getCurrentSize())));
                 imageView = new ImageView(img);
                 imageView.setOnMouseClicked(event -> { showPicture(); });
                 var size = steeringController.getCurrentIntSize();
@@ -55,16 +60,20 @@ public class PictureController implements ImageSizeChangeListener {
 
     public void setThumbnail(Thumbnail thumbnail) {
         this.thumbnail = thumbnail;
+        pictureId = thumbnail.getPictureId();
+        if (!thumbnail.isComplete()) {
+            loadThubmnail(pictureId);
+        }
     }
 
     public void initialize() {
-        if (thumbnail == null) {
+        if (thumbnail == null || !thumbnail.isComplete()) {
             progress = new ProgressIndicator();
             var size = steeringController.getCurrentIntSize();
             progress.setMinSize(size, size);
             container.getChildren().add(progress);
         } else {
-            var img = new Image(new ByteArrayInputStream(thumbnail.getImage(steeringController.getCurrentSize())));
+            var img = new Image(new ByteArrayInputStream(thumbnail.getPicture(steeringController.getCurrentSize())));
             imageView = new ImageView(img);
             imageView.setOnMouseClicked(event -> { showPicture(); });
             var size = steeringController.getCurrentIntSize();
@@ -99,7 +108,13 @@ public class PictureController implements ImageSizeChangeListener {
             return;
         }
 
-        var image = new Image(new ByteArrayInputStream(thumbnail.getImage(size)));
+        if (!thumbnail.isComplete()) {
+            progress.setMinSize(size.toInt(), size.toInt());
+            loadThubmnail(pictureId);
+            return;
+        }
+
+        var image = new Image(new ByteArrayInputStream(thumbnail.getPicture(size)));
         var s = steeringController.getCurrentIntSize();
         imageView.setImage(image);
         imageView.setFitHeight(s);
