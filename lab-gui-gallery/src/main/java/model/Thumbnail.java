@@ -6,15 +6,33 @@ public class Thumbnail {
     private final byte[] small;
     private final byte[] medium;
     private final byte[] large;
+    private final boolean complete;
+
+    public Thumbnail(Picture picture) {
+        this.picture = picture;
+        small = null;
+        medium = null;
+        large = null;
+        complete = false;
+    }
 
     public Thumbnail(Picture picture, byte[] small, byte[] medium, byte[] large) {
         this.picture = picture;
         this.small = small;
         this.medium = medium;
         this.large = large;
+        complete = true;
     }
     
-    public byte[] getImage(PictureSizes size) {
+    public boolean isComplete() {
+        return complete;
+    }
+
+    public Integer getPictureId() {
+        return picture.getId();
+    }
+
+    public byte[] getPicture(PictureSizes size) {
         if (size == PictureSizes.Small)
             return small;
         
