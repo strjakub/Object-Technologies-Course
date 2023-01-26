@@ -1,10 +1,10 @@
 package model;
 
-public class DirectoryDto {
+public class DirectoryDTO {
     
     private final String path;
 
-    public DirectoryDto(String path) {
+    public DirectoryDTO(String path) {
         this.path = path;
     }
 }

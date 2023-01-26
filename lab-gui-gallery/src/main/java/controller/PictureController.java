@@ -15,7 +15,7 @@ import javafx.stage.Stage;
 import model.ImageSizeChangeListener;
 import model.PictureSizes;
 import model.Thumbnail;
-import model.ThumbnailDAO;
+import model.ThumbnailDTO;
 import services.IRetrofitService;
 import services.NetworkCallback;
 
@@ -39,13 +39,13 @@ public class PictureController implements ImageSizeChangeListener {
 
     public void loadThubmnail(Integer id) {
         pictureId = id;
-        retrofitService.getThumbnail(id, new NetworkCallback<ThumbnailDAO>() {
+        retrofitService.getThumbnail(id, new NetworkCallback<ThumbnailDTO>() {
             @Override
-            public void process(ThumbnailDAO result) throws IOException {
+            public void process(ThumbnailDTO result) throws IOException {
 
                 if (result == null) System.out.println("qwqwq");
 
-                thumbnail = ThumbnailDAO.convertTo(result);
+                thumbnail = ThumbnailDTO.convertTo(result);
                 var img = new Image(new ByteArrayInputStream(thumbnail.getPicture(steeringController.getCurrentSize())));
                 imageView = new ImageView(img);
                 imageView.setOnMouseClicked(event -> { showPicture(); });
