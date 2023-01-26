@@ -15,7 +15,7 @@ public interface ThumbnailRepository extends JpaRepository<Thumbnail, Integer> {
     @Query("SELECT t FROM Thumbnail t WHERE t.image = ?1")
     Optional<Thumbnail> findByImage_Id(Image img);
 
-    @Query("SELECT t FROM Thumbnail t WHERE t.path = ?1")
+    @Query("SELECT t FROM Thumbnail t WHERE t.large IS NOT NULL AND t.medium IS NOT NULL AND t.small IS NOT NULL AND t.path = ?1")
     Collection<Thumbnail> findAllThumbnailsByPath(String path);
 
 }
