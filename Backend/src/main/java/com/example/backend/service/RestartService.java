@@ -2,8 +2,6 @@ package com.example.backend.service;
 
 import com.example.backend.model.Image;
 import com.example.backend.repositories.ImageRepository;
-import com.example.backend.utils.Size;
-import com.example.backend.utils.ThumbnailGenerator;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
