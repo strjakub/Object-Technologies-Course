@@ -60,8 +60,8 @@ public class Controller {
                 .onErrorReturnItem(new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR));
     }
 
-    @PostMapping()
-    public Single<ResponseEntity<Integer>> postImage(@RequestBody Directory directory) {
+    @PostMapping(path = "directory")
+    public Single<ResponseEntity<Integer>> postDirectory(@RequestBody Directory directory) {
         return directoryService.uploadDirectory(directory).subscribeOn(Schedulers.io())
                 .map(res -> new ResponseEntity<>(res, HttpStatus.OK))
                 .onErrorReturnItem(new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR));

@@ -8,5 +8,6 @@ public interface IRetrofitService {
     void postPicture(Picture image, NetworkCallback<Integer> callback);
     void getThumbnail(Integer id, NetworkCallback<ThumbnailDAO> callback);
     void getPathContents(String path, NetworkCallback<DirectoryContentsDAO> callback);
+    void postDirectory(String path, NetworkCallback<Integer> callback);
     void cancelAll();
 }

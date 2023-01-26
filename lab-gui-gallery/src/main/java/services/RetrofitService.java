@@ -1,6 +1,7 @@
 package services;
 
 import model.DirectoryContentsDAO;
+import model.DirectoryDto;
 import model.Picture;
 import model.ThumbnailDAO;
 
@@ -42,6 +43,12 @@ public class RetrofitService implements IRetrofitService {
     @Override
     public void cancelAll() {
         retrofitClient.cancelAll();
+    }
+
+    @Override
+    public void postDirectory(String path, NetworkCallback<Integer> callback) {
+        var dto = new DirectoryDto(path);
+        retryPolicy.execute(getApInterface().postDirectory(dto), callback);        
     }
 }
 
