@@ -59,7 +59,7 @@ public class ThumbnailService {
             Collection<String> directories = directoryRepository.findByPathStartsWith(path).stream()
                     .map(Directory::getPath)
                     .map(x -> x.split("/"))
-                    .filter(x -> x.length >= inDepth)
+                    .filter(x -> x.length > inDepth)
                     .map(x -> x[inDepth])
                     .distinct()
                     .toList();

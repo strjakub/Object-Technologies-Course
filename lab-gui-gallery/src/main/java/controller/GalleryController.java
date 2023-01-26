@@ -120,10 +120,17 @@ public class GalleryController implements ImageSizeChangeListener {
     }
 
     public void createDirectory(String name) {
-        names.add(name);
-        var controller = new DirectoryController(this, steeringController, name);
-        var rootLayout = Root.<VBox>createElement("view/directory.fxml", controller);
-        loadRootLayout(rootLayout);
+        var reference = this;
+        var path = pathController.getPathForDirectory(name);
+        retrofitService.postDirectory(path, new NetworkCallback<Integer>() {
+            @Override
+            public void process(Integer result) throws IOException {
+                names.add(name);
+                var controller = new DirectoryController(reference, steeringController, name);
+                var rootLayout = Root.<VBox>createElement("view/directory.fxml", controller);
+                loadRootLayout(rootLayout);
+            } 
+        });
     }
 
     @Override
