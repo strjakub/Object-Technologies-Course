@@ -61,6 +61,7 @@ public class ThumbnailService {
                     .map(x -> x.split("/"))
                     .filter(x -> x.length >= inDepth)
                     .map(x -> x[inDepth])
+                    .distinct()
                     .toList();
             subscriber.onSuccess(new DirectoryContents(thumbnails, directories));
         });
