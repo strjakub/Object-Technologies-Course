@@ -1,9 +1,9 @@
 package services;
 
 import model.DirectoryContentsDAO;
-import model.DirectoryDto;
+import model.DirectoryDTO;
 import model.Picture;
-import model.ThumbnailDAO;
+import model.ThumbnailDTO;
 
 public class RetrofitService implements IRetrofitService {
 
@@ -31,7 +31,7 @@ public class RetrofitService implements IRetrofitService {
     }
 
     @Override
-    public void getThumbnail(Integer id, NetworkCallback<ThumbnailDAO> callback) {       
+    public void getThumbnail(Integer id, NetworkCallback<ThumbnailDTO> callback) {       
         retryPolicy.execute(getApInterface().getThumbnail(id), callback);
     }
 
@@ -47,7 +47,7 @@ public class RetrofitService implements IRetrofitService {
 
     @Override
     public void postDirectory(String path, NetworkCallback<Integer> callback) {
-        var dto = new DirectoryDto(path);
+        var dto = new DirectoryDTO(path);
         retryPolicy.execute(getApInterface().postDirectory(dto), callback);        
     }
 }

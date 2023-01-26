@@ -1,9 +1,9 @@
 package services;
 
 import model.DirectoryContentsDAO;
-import model.DirectoryDto;
+import model.DirectoryDTO;
 import model.Picture;
-import model.ThumbnailDAO;
+import model.ThumbnailDTO;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -17,10 +17,10 @@ public interface RetrofitInterface {
     Call<Integer> postPicture(@Body Picture image);
 
     @POST("directory")
-    Call<Integer> postDirectory(@Body DirectoryDto directory);
+    Call<Integer> postDirectory(@Body DirectoryDTO directory);
 
     @GET("thumbnail/{id}")
-    Call<ThumbnailDAO> getThumbnail(@Path("id") Integer id);
+    Call<ThumbnailDTO> getThumbnail(@Path("id") Integer id);
 
     @GET("path")
     Call<DirectoryContentsDAO> getPathContents(@Query("path") String path);
