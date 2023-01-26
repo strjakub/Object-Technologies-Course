@@ -1,8 +1,10 @@
 package com.example.backend.service;
 
+import com.example.backend.model.Directory;
 import com.example.backend.model.DirectoryContents;
 import com.example.backend.model.Image;
 import com.example.backend.model.Thumbnail;
+import com.example.backend.repositories.DirectoryRepository;
 import com.example.backend.repositories.ImageRepository;
 import com.example.backend.repositories.ThumbnailRepository;
 import com.example.backend.utils.Size;
@@ -17,6 +19,7 @@ import javax.persistence.EntityNotFoundException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -24,11 +27,13 @@ public class ThumbnailService {
 
     private final ThumbnailRepository thumbnailRepository;
     private final ImageRepository imageRepository;
+    private final DirectoryRepository directoryRepository;
     private final ThumbnailGenerator generator;
 
-    public ThumbnailService(ThumbnailRepository thumbnailRepository, ImageRepository imageRepository, ThumbnailGenerator generator) {
+    public ThumbnailService(ThumbnailRepository thumbnailRepository, ImageRepository imageRepository, ThumbnailGenerator generator, DirectoryRepository directoryRepository) {
         this.thumbnailRepository = thumbnailRepository;
         this.imageRepository = imageRepository;
+        this.directoryRepository = directoryRepository;
         this.generator = generator;
     }
 
@@ -49,8 +54,14 @@ public class ThumbnailService {
 
     public Single<DirectoryContents> getPathContents(String path){
         return Single.create(subscriber -> {
+            int inDepth = path.split("/").length;
             Collection<Thumbnail> thumbnails = thumbnailRepository.findAllThumbnailsByPath(path);
-            Collection<String> directories = thumbnailRepository.findDirectories(path);
+            Collection<String> directories = directoryRepository.findByPathStartsWith(path).stream()
+                    .map(Directory::getPath)
+                    .map(x -> x.split("/"))
+                    .filter(x -> x.length >= inDepth)
+                    .map(x -> x[inDepth])
+                    .toList();
             subscriber.onSuccess(new DirectoryContents(thumbnails, directories));
         });
     }
