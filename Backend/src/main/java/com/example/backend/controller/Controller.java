@@ -1,8 +1,10 @@
 package com.example.backend.controller;
 
+import com.example.backend.model.Directory;
 import com.example.backend.model.DirectoryContents;
 import com.example.backend.model.Image;
 import com.example.backend.model.Thumbnail;
+import com.example.backend.service.DirectoryService;
 import com.example.backend.service.ImageService;
 import com.example.backend.service.ThumbnailService;
 import com.example.backend.watcher.DirectoryWatcher;
@@ -21,12 +23,14 @@ public class Controller {
 
     private final ThumbnailService thumbnailService;
     private final ImageService imageService;
+    private final DirectoryService directoryService;
 
     private final DirectoryWatcher directoryWatcher;
 
-    public Controller(ThumbnailService thumbnailService, ImageService imageService, DirectoryWatcher directoryWatcher) throws IOException {
+    public Controller(ThumbnailService thumbnailService, ImageService imageService, DirectoryService directoryService, DirectoryWatcher directoryWatcher) throws IOException {
         this.thumbnailService = thumbnailService;
         this.imageService = imageService;
+        this.directoryService = directoryService;
         this.directoryWatcher = directoryWatcher;
         directoryWatcher.watch();
     }
@@ -52,6 +56,13 @@ public class Controller {
     public Single<ResponseEntity<Integer>> postImage(@RequestBody Image image) {
         thumbnailService.generateThumbnail(image);
         return imageService.uploadImage(image).subscribeOn(Schedulers.io())
+                .map(res -> new ResponseEntity<>(res, HttpStatus.OK))
+                .onErrorReturnItem(new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR));
+    }
+
+    @PostMapping(path = "directory")
+    public Single<ResponseEntity<Integer>> postDirectory(@RequestBody Directory directory) {
+        return directoryService.uploadDirectory(directory).subscribeOn(Schedulers.io())
                 .map(res -> new ResponseEntity<>(res, HttpStatus.OK))
                 .onErrorReturnItem(new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR));
     }

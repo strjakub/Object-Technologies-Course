@@ -28,4 +28,8 @@ public class PathController {
     public void goToDirectory(String name) {
         path += SLASH + name;
     }
+
+    public String getPathForDirectory(String name) {
+        return path + SLASH + name;
+    }
 }
